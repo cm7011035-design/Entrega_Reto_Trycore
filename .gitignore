@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+salidas/respaldo_validador_antiguo.txt

@@ -1,0 +1,3 @@
+CASO FICTICIO CON FINES DE EVALUACION.
+Este historial de publicaciones es simulado: fue generado para el reto y no corresponde a resultados reales de ninguna empresa.
+Se entrega tal como un sistema real lo recibiria: con fechas en distintos formatos, decimales con coma, celdas vacias y filas repetidas.
