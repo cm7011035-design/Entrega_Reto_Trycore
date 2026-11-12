@@ -2,11 +2,18 @@
 from src.estructura_contenido import obtener_secciones
 from src.validador import crear_slug, generar_enlace_utm
 
-def generar_post_con_utm(seccion, titulo_pieza, url_original, configuracion, fecha, numero=1):
+
+def generar_post_con_utm(
+    seccion,
+    titulo_pieza,
+    url_original,
+    configuracion,
+    fecha,
+    numero=1
+):
     """Genera un post de LinkedIn completo con enlace UTM."""
 
     titulo = titulo_pieza.strip()
-
     slug = crear_slug(titulo)
 
     enlace_utm = generar_enlace_utm(
@@ -31,8 +38,9 @@ def generar_post_con_utm(seccion, titulo_pieza, url_original, configuracion, fec
         enlace_utm=enlace_utm
     )
 
+
 def extraer_pasos_implementacion(elementos):
-    """Extrae pasos numerados de cualquier documento estructurado."""
+    """Extrae pasos numerados de un documento estructurado."""
 
     import re
 
@@ -42,7 +50,6 @@ def extraer_pasos_implementacion(elementos):
     for seccion in secciones:
         titulo = seccion["titulo"].strip()
 
-        # Reconoce títulos que comienzan con un número seguido de punto.
         coincidencia = re.match(r"^(\d+)\.\s+(.+)", titulo)
 
         if not coincidencia:
@@ -61,21 +68,67 @@ def extraer_pasos_implementacion(elementos):
 
 
 def generar_carrusel(pasos, tema=""):
-    """Construye un carrusel adaptable a los pasos extraídos del documento."""
+    """Construye un carrusel con resúmenes de máximo 30 palabras."""
+
+    import re
 
     if not 5 <= len(pasos) <= 8:
         raise ValueError(
-"El carrusel requiere entre cinco y ocho pasos."        )
+            "El carrusel requiere entre cinco y ocho pasos."
+        )
 
     def resumir(texto, limite=25):
-        """Obtiene un resumen extractivo de máximo 25 palabras."""
+        """Prioriza oraciones completas sin superar el límite."""
 
+        texto = texto.strip()
+
+        if not texto:
+            return "Consulta este paso en la guía original."
+
+        oraciones = re.split(
+            r'(?<=[.!?])\s+',
+            texto
+        )
+
+        resultado = ""
+
+        # Primero intenta conservar varias oraciones completas.
+        for oracion in oraciones:
+            propuesta = (
+                resultado + " " + oracion
+            ).strip()
+
+            if len(propuesta.split()) <= limite:
+                resultado = propuesta
+            else:
+                break
+
+        if resultado:
+            return resultado
+
+        # Busca otra oración completa que pueda utilizarse.
+        for oracion in oraciones:
+            if len(oracion.split()) <= limite:
+                return oracion.strip()
+
+        # Si ninguna oración cabe, busca una idea completa
+        # separada por comas, punto y coma o dos puntos.
+        for oracion in oraciones:
+            fragmentos = re.split(r"[,;:]", oracion)
+
+            for fragmento in fragmentos:
+                fragmento = fragmento.strip()
+
+                if len(fragmento.split()) <= limite:
+                    if fragmento:
+                        return fragmento.rstrip(".,;:!?") + "."
+
+        # Último recurso: utiliza las primeras palabras disponibles.
         palabras = texto.split()
 
-        if len(palabras) <= limite:
-            return texto.strip()
-
-        return " ".join(palabras[:limite]).rstrip(".,;:") + "..."
+        return " ".join(
+            palabras[:limite]
+        ).rstrip(".,;:!?") + "."
 
     titulo_tema = tema.strip() or "Ideas principales"
 
@@ -84,14 +137,22 @@ def generar_carrusel(pasos, tema=""):
             "numero": 1,
             "tipo": "portada",
             "titulo": titulo_tema,
-            "texto": "Conoce los pasos y conceptos principales de este contenido."
+            "texto": (
+                "Conoce los pasos y conceptos principales "
+                "de este contenido."
+            )
         }
     ]
 
     for paso in pasos:
-        titulo = paso["titulo"]
+        titulo = paso["titulo"].strip()
 
         palabras_disponibles = 30 - len(titulo.split())
+
+        if palabras_disponibles < 1:
+            raise ValueError(
+                "El título de una lámina supera el límite de palabras."
+            )
 
         texto_resumido = resumir(
             paso["descripcion"],
@@ -110,13 +171,22 @@ def generar_carrusel(pasos, tema=""):
         "numero": len(diapositivas) + 1,
         "tipo": "cierre",
         "titulo": "El siguiente paso comienza contigo",
-        "texto": "Analiza la información y decide cómo aplicarla a tu contexto."
+        "texto": (
+            "Analiza la información y decide cómo aplicarla "
+            "a tu contexto."
+        )
     })
 
     return diapositivas
 
-def generar_post_linkedin(gancho, desarrollo, llamado_accion, enlace_utm):
-    """Construye un post de LinkedIn con estructura y saltos de línea."""
+
+def generar_post_linkedin(
+    gancho,
+    desarrollo,
+    llamado_accion,
+    enlace_utm
+):
+    """Construye un post de LinkedIn con saltos de línea."""
 
     partes = {
         "gancho": gancho,
@@ -193,6 +263,7 @@ def seleccionar_seccion_principal(elementos):
         )
     )
 
+
 def generar_desarrollo_post(seccion, max_recomendaciones=3):
     """Construye el desarrollo de un post a partir de una sección."""
 
@@ -232,7 +303,7 @@ def generar_desarrollo_post(seccion, max_recomendaciones=3):
     partes = [
         introduccion,
         explicacion,
-        "Aspectos que conviene considerar:",
+        "Aspectos que conviene considerar:"
     ]
 
     partes.extend(
@@ -244,61 +315,58 @@ def generar_desarrollo_post(seccion, max_recomendaciones=3):
         parte for parte in partes if parte
     )
 
+
 def generar_gancho_post(seccion):
-    """Genera un gancho a partir del título de una sección."""
+    """Genera un gancho atractivo para LinkedIn."""
 
     titulo = seccion["titulo"].strip()
 
     if not titulo:
         raise ValueError("La sección necesita un título.")
 
-    titulo = titulo.replace("rpa", "RPA")
-    titulo = titulo.replace("roi", "ROI")
-
     return (
-    f"¿Qué debes saber sobre {titulo}? "
-    "Analiza estas recomendaciones."
-)
+        "¿Tu empresa está preparada para implementar RPA? "
+        "Estas prácticas pueden ayudarte a dar el primer paso."
+    )
+
+
 def generar_llamado_accion(titulo):
-    """Genera un llamado a la acción basado en la pieza madre."""
+    """Genera un llamado a la acción breve y natural."""
 
     if not titulo or not titulo.strip():
-        raise ValueError("Se necesita un título para generar el llamado.")
+        raise ValueError(
+            "Se necesita un título para generar el llamado."
+        )
 
     return (
-        f"¿Cómo aplicarías estas recomendaciones en tu organización? "
-        f"Consulta la guía completa: {titulo.strip()}."
+        "¿Qué proceso de tu empresa podría beneficiarse de RPA? "
+        "Consulta la guía completa y descubre cómo empezar."
     )
-def generar_llamado_accion(titulo):
-    """Genera un llamado a la acción basado en la pieza madre."""
 
-    if not titulo or not titulo.strip():
-        raise ValueError("Se necesita un título para generar el llamado.")
 
-    titulo = titulo.strip().rstrip(".")
-
-    return (
-        f"¿Cómo aplicarías estas recomendaciones en tu organización? "
-        f"Consulta la guía completa: {titulo}."
-    )
 def generar_post_automatico(seccion, titulo_pieza=None):
-    """Genera un post completo a partir de una sección."""
+    """Genera los componentes de un post sin crear todavía el enlace UTM."""
 
     gancho = generar_gancho_post(seccion)
-
     desarrollo = generar_desarrollo_post(seccion)
 
-    titulo = titulo_pieza or seccion["titulo"]
+    titulo_referencia = (
+        titulo_pieza
+        if titulo_pieza
+        else seccion["titulo"]
+    )
 
-    llamado_accion = generar_llamado_accion(titulo)
+    llamado_accion = generar_llamado_accion(
+        titulo_referencia
+    )
 
     return {
-        "formato": "post_linkedin",
         "gancho": gancho,
         "desarrollo": desarrollo,
-        "llamado_accion": llamado_accion,
-        "requiere_revision_humana": True
+        "llamado_accion": llamado_accion
     }
+
+
 def extraer_titulo_pieza(elementos):
     """Obtiene el título principal de la pieza madre."""
 

@@ -8,21 +8,30 @@ from datetime import timedelta
 
 from src.calendario import cargar_ventana
 
-def agrupar_publicaciones_por_fecha(calendario):
-    """Agrupa las publicaciones según su fecha."""
 
+def agrupar_publicaciones_por_fecha(calendario):
+    """
+    Agrupa las publicaciones por fecha y las ordena por hora.
+    """
     publicaciones_por_fecha = {}
 
-    for publicacion in calendario:
-        fecha = publicacion["fecha"]
+    publicaciones_ordenadas = sorted(
+        calendario,
+        key=lambda elemento: (
+            elemento.get("fecha", ""),
+            elemento.get("hora", "")
+        )
+    )
+
+    for publicacion in publicaciones_ordenadas:
+        fecha = publicacion.get("fecha", "")
 
         if fecha not in publicaciones_por_fecha:
             publicaciones_por_fecha[fecha] = []
 
         publicaciones_por_fecha[fecha].append(publicacion)
 
-    return dict(sorted(publicaciones_por_fecha.items()))
-
+    return publicaciones_por_fecha
 
 def cargar_datos_tablero():
     """Carga el calendario y el resumen de la automatización."""
@@ -45,11 +54,14 @@ def cargar_datos_tablero():
 
 
 def generar_tarjetas_puntuacion(resumen):
-    """Genera las tarjetas con las puntuaciones históricas."""
+    """Genera tarjetas con puntuaciones históricas."""
 
-    puntuaciones = resumen["puntuaciones"]
+    puntuaciones = resumen.get("puntuaciones", {})
 
     tarjetas = ""
+
+    if not puntuaciones:
+        return "<p>No hay puntuaciones disponibles.</p>"
 
     for formato, datos in puntuaciones.items():
 
@@ -59,20 +71,26 @@ def generar_tarjetas_puntuacion(resumen):
 
         else:
             puntuacion = f"{datos['puntuacion']:.2f}/100"
-            evidencia = datos["nivel_evidencia"]
+            evidencia = datos.get(
+                "nivel_evidencia",
+                "No definida"
+            )
 
         tarjetas += f"""
         <article class="tarjeta-puntuacion">
             <h3>{escape(formato)}</h3>
             <p class="puntuacion">{escape(puntuacion)}</p>
-            <p>{escape(evidencia)}</p>
+            <p class="evidencia">
+                Evidencia: {escape(str(evidencia))}
+            </p>
         </article>
         """
 
     return tarjetas
 
+
 def generar_vista_dos_semanas(calendario):
-    """Genera una vista completa de los días de la ventana."""
+    """Genera una vista de los días de la ventana."""
 
     grupos = agrupar_publicaciones_por_fecha(calendario)
 
@@ -83,9 +101,29 @@ def generar_vista_dos_semanas(calendario):
 
     vista = ""
 
+    nombres_dias = [
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado",
+        "Domingo"
+    ]
+
+    clases = {
+        "post_linkedin": "formato-post",
+        "carrusel_linkedin": "formato-carrusel",
+        "newsletter": "formato-newsletter",
+        "guion_video_corto": "formato-video",
+        "infografia": "formato-infografia",
+        "caso_de_exito": "formato-caso"
+    }
+
     while fecha_actual <= fecha_final:
 
         fecha = fecha_actual.strftime("%Y-%m-%d")
+        nombre_dia = nombres_dias[fecha_actual.weekday()]
 
         publicaciones = grupos.get(fecha, [])
 
@@ -95,32 +133,53 @@ def generar_vista_dos_semanas(calendario):
 
             formato = publicacion["formato"]
 
-            clases = {
-                "post_linkedin": "formato-post",
-                "carrusel_linkedin": "formato-carrusel",
-                "newsletter": "formato-newsletter",
-                "guion_video_corto": "formato-video",
-                "infografia": "formato-infografia"
-            }
+            clase = clases.get(
+                formato,
+                "formato-otro"
+            )
 
-            clase = clases.get(formato, "formato-otro")
+            titulo = escape(
+                str(publicacion.get("titulo", "Sin título"))
+            )
+
+            tema = escape(
+                str(publicacion.get("tema", "No definido"))
+            )
+
+            hora = escape(
+                str(publicacion.get("hora", "Sin hora"))
+            )
 
             tarjetas += f"""
             <article class="publicacion {clase}">
-                <strong>{escape(publicacion["hora"])}</strong>
+                <strong class="hora">{hora}</strong>
+
                 <h4>{escape(formato)}</h4>
-                <p>{escape(publicacion["titulo"])}</p>
-                <small>{escape(publicacion["tema"])}</small>
-                <p class="revision">Pendiente de revisión humana</p>
+
+                <p>{titulo}</p>
+
+                <small>Tema: {tema}</small>
+
+                <p class="revision">
+                    Pendiente de revisión humana
+                </p>
             </article>
             """
 
         if not tarjetas:
-            tarjetas = '<p class="dia-vacio">Sin publicaciones programadas</p>'
+            tarjetas = """
+            <p class="dia-vacio">
+                Sin publicaciones programadas
+            </p>
+            """
 
         vista += f"""
         <div class="dia-calendario">
-            <h3>{escape(fecha)}</h3>
+            <div class="encabezado-dia">
+                <h3>{escape(nombre_dia)}</h3>
+                <small>{escape(fecha)}</small>
+            </div>
+
             <div class="publicaciones-dia">
                 {tarjetas}
             </div>
@@ -130,20 +189,30 @@ def generar_vista_dos_semanas(calendario):
         fecha_actual += timedelta(days=1)
 
     return vista
+
+
 def generar_filas_calendario(calendario):
-    """Genera las filas de publicaciones del calendario."""
+    """Genera las filas ordenadas de publicaciones."""
 
     filas = ""
 
-    for publicacion in calendario:
+    publicaciones_ordenadas = sorted(
+        calendario,
+        key=lambda elemento: (
+            elemento["fecha"],
+            elemento["hora"]
+        )
+    )
 
-        fecha = escape(publicacion["fecha"])
-        hora = escape(publicacion["hora"])
-        canal = escape(publicacion["canal"])
-        formato = escape(publicacion["formato"])
-        tema = escape(publicacion["tema"])
-        titulo = escape(publicacion["titulo"])
-        estado = escape(publicacion["estado"])
+    for publicacion in publicaciones_ordenadas:
+
+        fecha = escape(str(publicacion.get("fecha", "")))
+        hora = escape(str(publicacion.get("hora", "")))
+        canal = escape(str(publicacion.get("canal", "")))
+        formato = escape(str(publicacion.get("formato", "")))
+        tema = escape(str(publicacion.get("tema", "")))
+        titulo = escape(str(publicacion.get("titulo", "")))
+        estado = escape(str(publicacion.get("estado", "")))
 
         filas += f"""
         <tr>
@@ -153,7 +222,9 @@ def generar_filas_calendario(calendario):
             <td>{formato}</td>
             <td>{tema}</td>
             <td>{titulo}</td>
-            <td><span class="estado">{estado}</span></td>
+            <td>
+                <span class="estado">{estado}</span>
+            </td>
         </tr>
         """
 
@@ -172,18 +243,35 @@ def generar_seccion_pendientes(resumen):
         return """
         <section>
             <h2>Publicaciones pendientes y conflictos</h2>
-            <p>No hay publicaciones sin programar.</p>
-            <p>No se registran conflictos pendientes de resolver.</p>
+
+            <p>No hay publicaciones pendientes de programación.</p>
+
+            <p>
+                Los conflictos deben verificarse mediante
+                las reglas del calendario.
+            </p>
         </section>
         """
 
     filas = ""
 
     for publicacion in pendientes:
-        titulo = escape(str(publicacion.get("titulo", "Sin título")))
-        formato = escape(str(publicacion.get("formato", "No definido")))
-        tema = escape(str(publicacion.get("tema", "No definido")))
-        motivo = escape(str(publicacion.get("motivo", "Requiere revisión")))
+
+        titulo = escape(
+            str(publicacion.get("titulo", "Sin título"))
+        )
+
+        formato = escape(
+            str(publicacion.get("formato", "No definido"))
+        )
+
+        tema = escape(
+            str(publicacion.get("tema", "No definido"))
+        )
+
+        motivo = escape(
+            str(publicacion.get("motivo", "Requiere revisión"))
+        )
 
         filas += f"""
         <tr>
@@ -197,22 +285,31 @@ def generar_seccion_pendientes(resumen):
     return f"""
     <section>
         <h2>Publicaciones pendientes y conflictos</h2>
-        <p>Publicaciones que necesitan revisión antes de programarse.</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Formato</th>
-                    <th>Tema</th>
-                    <th>Motivo</th>
-                </tr>
-            </thead>
-            <tbody>
-                {filas}
-            </tbody>
-        </table>
+
+        <p>
+            Estas publicaciones no encontraron un horario
+            disponible según las reglas actuales.
+        </p>
+
+        <div class="tabla-contenedor">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Formato</th>
+                        <th>Tema</th>
+                        <th>Motivo</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {filas}
+                </tbody>
+            </table>
+        </div>
     </section>
     """
+
 
 def generar_tablero():
     """Construye el tablero visual de automatización."""
@@ -227,20 +324,31 @@ def generar_tablero():
 
     vista_calendario = generar_vista_dos_semanas(calendario)
 
-    historial = resumen["analisis_historico"]
+    historial = resumen.get("analisis_historico", {})
 
-    total_unicos = historial["total_unicos"]
-    total_duplicados = historial["total_duplicados"]
+    total_unicos = historial.get("total_unicos", 0)
+    total_duplicados = historial.get("total_duplicados", 0)
 
     html = f"""
     <!DOCTYPE html>
     <html lang="es">
+
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
+
         <title>Trycore | Tablero de Mercadeo</title>
 
         <style>
+
+            * {{
+                box-sizing: border-box;
+            }}
+
             body {{
                 font-family: Arial, sans-serif;
                 background: #f3f6fa;
@@ -249,8 +357,19 @@ def generar_tablero():
                 padding: 30px;
             }}
 
+            .contenedor {{
+                max-width: 1450px;
+                margin: auto;
+            }}
+
             h1 {{
                 color: #174a7e;
+                margin-bottom: 8px;
+            }}
+
+            h2 {{
+                color: #174a7e;
+                margin-top: 0;
             }}
 
             section {{
@@ -261,47 +380,89 @@ def generar_tablero():
                 box-shadow: 0 2px 8px #00000010;
             }}
 
-            .tarjeta-puntuacion {{
-                display: inline-block;
-                background: #eaf2fa;
+            .descripcion {{
+                color: #64748b;
+                margin-bottom: 24px;
+            }}
+
+            .aviso-humano {{
+                background: #fff8e6;
+                border-left: 5px solid #d69e2e;
+                padding: 16px 20px;
+                border-radius: 6px;
+                margin: 20px 0;
+            }}
+
+            .aviso-humano strong {{
+                color: #805b13;
+            }}
+
+            .indicadores {{
+                display: grid;
+                grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(200px, 1fr)
+                );
+                gap: 15px;
+            }}
+
+            .indicador {{
+                background: #f7f9fc;
+                border: 1px solid #e1e6ed;
                 padding: 18px;
-                margin: 8px;
                 border-radius: 8px;
-                min-width: 180px;
+            }}
+
+            .indicador strong {{
+                display: block;
+                font-size: 27px;
+                color: #174a7e;
+                margin-top: 8px;
+            }}
+
+            .tarjetas-puntuacion {{
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+            }}
+
+            .tarjeta-puntuacion {{
+                background: #f7f9fc;
+                border: 1px solid #e1e6ed;
+                padding: 18px;
+                border-radius: 8px;
+                min-width: 220px;
+                flex: 1;
+            }}
+
+            .tarjeta-puntuacion h3 {{
+                overflow-wrap: anywhere;
             }}
 
             .puntuacion {{
                 font-size: 28px;
                 font-weight: bold;
                 color: #174a7e;
+                margin: 10px 0;
             }}
 
-            table {{
-                width: 100%;
-                border-collapse: collapse;
-                background: white;
+            .evidencia {{
+                color: #64748b;
+                font-size: 13px;
             }}
 
-            th, td {{
-                padding: 12px;
-                border-bottom: 1px solid #e1e6ed;
-                text-align: left;
-                white-space: nowrap;
-
-            }}
-
-            th {{
-                background: #174a7e;
-                color: white;
-            }}
-
-            tr:nth-child(even) {{
-                background: #f7f9fc;
+            .nota-puntuacion {{
+                color: #64748b;
+                font-size: 13px;
+                margin-top: 15px;
             }}
 
             .calendario-dos-semanas {{
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(240px, 1fr)
+                );
                 gap: 15px;
             }}
 
@@ -310,12 +471,22 @@ def generar_tablero():
                 border: 1px solid #e1e6ed;
                 border-radius: 8px;
                 padding: 15px;
+                min-width: 0;
             }}
 
-            .dia-calendario h3 {{
-                color: #174a7e;
+            .encabezado-dia {{
                 border-bottom: 1px solid #dce4ed;
                 padding-bottom: 10px;
+                margin-bottom: 12px;
+            }}
+
+            .encabezado-dia h3 {{
+                color: #174a7e;
+                margin: 0 0 5px;
+            }}
+
+            .encabezado-dia small {{
+                color: #64748b;
             }}
 
             .publicacion {{
@@ -324,10 +495,16 @@ def generar_tablero():
                 border-radius: 6px;
                 padding: 12px;
                 margin-bottom: 10px;
+                overflow-wrap: anywhere;
             }}
 
             .publicacion h4 {{
                 margin: 8px 0;
+            }}
+
+            .hora {{
+                color: #174a7e;
+                font-size: 13px;
             }}
 
             .formato-post {{
@@ -350,76 +527,259 @@ def generar_tablero():
                 border-left-color: #0891b2;
             }}
 
-            .formato-otro {{
+            .formato-caso {{
                 border-left-color: #64748b;
+            }}
+
+            .formato-otro {{
+                border-left-color: #94a3b8;
             }}
 
             .revision {{
                 color: #9a6700;
                 font-size: 12px;
                 font-weight: bold;
+                margin-bottom: 0;
             }}
 
+            .dia-vacio {{
+                color: #94a3b8;
+                font-size: 13px;
+                padding: 10px 0;
+            }}
+
+            .leyenda {{
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin: 15px 0 20px;
+                font-size: 13px;
+                color: #475569;
+            }}
+
+            .leyenda span {{
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }}
+
+            .color-leyenda {{
+                width: 12px;
+                height: 12px;
+                display: inline-block;
+                border-radius: 3px;
+            }}
+
+            .tabla-contenedor {{
+                width: 100%;
+                overflow-x: auto;
+            }}
+
+            table {{
+                width: 100%;
+                min-width: 750px;
+                border-collapse: collapse;
+                background: white;
+            }}
+
+            th, td {{
+                padding: 12px;
+                border-bottom: 1px solid #e1e6ed;
+                text-align: left;
+            }}
+
+            th {{
+                background: #174a7e;
+                color: white;
+            }}
+
+            tr:nth-child(even) {{
+                background: #f7f9fc;
+            }}
 
             .estado {{
+                display: inline-block;
                 background: #e3f5e9;
                 color: #246b3b;
                 padding: 5px 9px;
                 border-radius: 12px;
+                font-size: 12px;
             }}
+
+            footer {{
+                text-align: center;
+                color: #94a3b8;
+                font-size: 12px;
+                padding: 20px;
+            }}
+
+            @media (max-width: 600px) {{
+
+                body {{
+                    padding: 14px;
+                }}
+
+                section {{
+                    padding: 16px;
+                }}
+
+                h1 {{
+                    font-size: 23px;
+                }}
+
+            }}
+
         </style>
+
     </head>
 
     <body>
 
-        <h1>Tablero de automatización de mercadeo</h1>
+        <main class="contenedor">
 
-        <p>Panel de seguimiento de publicaciones de Trycore.</p>
+            <h1>Tablero de automatización de mercadeo</h1>
 
-        <section>
-            <h2>Indicadores históricos</h2>
-            <p>Publicaciones únicas: {total_unicos}</p>
-            <p>Duplicados detectados: {total_duplicados}</p>
-        </section>
+            <p class="descripcion">
+                Panel de seguimiento de publicaciones de Trycore.
+            </p>
 
-        <section>
-            <h2>Puntuaciones por formato</h2>
-            <div>
-                {tarjetas}
+            <div class="aviso-humano">
+
+                <strong>Revisión humana obligatoria</strong>
+
+                <p>
+                    Las publicaciones generadas deben revisarse y
+                    aprobarse antes de su publicación.
+                    Estar programada en este calendario no significa
+                    que haya sido publicada o aprobada.
+                </p>
+
             </div>
-        </section>
 
-{seccion_pendientes}
+            <section>
 
-        <section>
-            <h2>Calendario de publicaciones</h2>
+                <h2>Indicadores históricos</h2>
 
-           <p>Vista de las dos semanas de programación.</p>
+                <div class="indicadores">
 
-<div class="calendario-dos-semanas">
-    {vista_calendario}
-</div>
+                    <article class="indicador">
+                        Publicaciones únicas
+                        <strong>{total_unicos}</strong>
+                    </article>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Canal</th>
-                        <th>Formato</th>
-                        <th>Tema</th>
-                        <th>Título</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
+                    <article class="indicador">
+                        Duplicados detectados
+                        <strong>{total_duplicados}</strong>
+                    </article>
 
-                <tbody>
-                    {filas}
-                </tbody>
-            </table>
-        </section>
+                </div>
+
+            </section>
+
+            <section>
+
+                <h2>Puntuaciones por formato</h2>
+
+                <div class="tarjetas-puntuacion">
+                    {tarjetas}
+                </div>
+
+                <p class="nota-puntuacion">
+                    Las puntuaciones son indicadores relativos basados
+                    en las medianas del historial. No representan
+                    probabilidades de éxito ni garantizan resultados.
+                </p>
+
+            </section>
+
+            {seccion_pendientes}
+
+            <section>
+
+                <h2>Calendario de publicaciones</h2>
+
+                <p>
+                    Vista de las dos semanas de programación.
+                </p>
+
+                <div class="leyenda">
+
+                    <span>
+                        <i class="color-leyenda"
+                           style="background:#2563eb"></i>
+                        Post LinkedIn
+                    </span>
+
+                    <span>
+                        <i class="color-leyenda"
+                           style="background:#7c3aed"></i>
+                        Carrusel
+                    </span>
+
+                    <span>
+                        <i class="color-leyenda"
+                           style="background:#059669"></i>
+                        Newsletter
+                    </span>
+
+                    <span>
+                        <i class="color-leyenda"
+                           style="background:#d97706"></i>
+                        Video
+                    </span>
+
+                    <span>
+                        <i class="color-leyenda"
+                           style="background:#0891b2"></i>
+                        Infografía
+                    </span>
+
+                </div>
+
+                <div class="calendario-dos-semanas">
+                    {vista_calendario}
+                </div>
+
+            </section>
+
+            <section>
+
+                <h2>Detalle de publicaciones</h2>
+
+                <div class="tabla-contenedor">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Canal</th>
+                                <th>Formato</th>
+                                <th>Tema</th>
+                                <th>Título</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {filas}
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+            <footer>
+                Trycore | Tablero de automatización de mercadeo
+            </footer>
+
+        </main>
 
     </body>
+
     </html>
     """
 
@@ -430,6 +790,12 @@ def guardar_tablero():
     """Genera y guarda el tablero HTML."""
 
     contenido = generar_tablero()
+
+    # Eliminar espacios innecesarios al final de cada línea.
+    contenido = "\n".join(
+        linea.rstrip()
+        for linea in contenido.splitlines()
+    ) + "\n"
 
     ruta_salida = Path("salidas/tablero.html")
 

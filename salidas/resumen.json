@@ -116,10 +116,10 @@
     "formatos_generados": {
         "post_linkedin": {
             "formato": "post_linkedin",
-            "gancho": "¿Qué debes saber sobre Mejores prácticas de implementación de RPA? Analiza estas recomendaciones.",
+            "gancho": "¿Tu empresa está preparada para implementar RPA? Estas prácticas pueden ayudarte a dar el primer paso.",
             "desarrollo": "Las mejores prácticas en la implementación RPA son vitales para el éxito del ROI. Algunas de ellas son:\n\nImplementa estrategias diseñadas para proteger los entornos digitales y simplificar el control granular de permisos otorgados a los robots. De igual forma, ten en cuenta que los procesos deben servirse desde un embudo, apoyándote de la automatización de Data Warehouse para procesos simples y para llegar más lejos en procesos más complejos. Procura que en el transcurso de adopción se encuentren mejores formas de automatizar, optimizar y estandarizar procesos que puedan documentarse.\n\nAspectos que conviene considerar:\n\n• Considera el impacto comercial antes de optar por algún proceso a automatizar con RPA.\n\n• Combina RPA atendido y desatendido.\n\n• Define y enfócate en el ROI deseado",
-            "llamado_accion": "¿Cómo aplicarías estas recomendaciones en tu organización? Consulta la guía completa: Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
-            "texto": "¿Qué debes saber sobre Mejores prácticas de implementación de RPA? Analiza estas recomendaciones.\n\nLas mejores prácticas en la implementación RPA son vitales para el éxito del ROI. Algunas de ellas son:\n\nImplementa estrategias diseñadas para proteger los entornos digitales y simplificar el control granular de permisos otorgados a los robots. De igual forma, ten en cuenta que los procesos deben servirse desde un embudo, apoyándote de la automatización de Data Warehouse para procesos simples y para llegar más lejos en procesos más complejos. Procura que en el transcurso de adopción se encuentren mejores formas de automatizar, optimizar y estandarizar procesos que puedan documentarse.\n\nAspectos que conviene considerar:\n\n• Considera el impacto comercial antes de optar por algún proceso a automatizar con RPA.\n\n• Combina RPA atendido y desatendido.\n\n• Define y enfócate en el ROI deseado\n\n¿Cómo aplicarías estas recomendaciones en tu organización? Consulta la guía completa: Todo lo que debes saber sobre este tipo de automatización robótica de tareas.\n\nhttps://trycore.com/guia-de-automatizacion-con-rpa/?utm_source=linkedin&utm_medium=social-organico&utm_campaign=todo-lo-que-debes-saber-sobre-este-tipo-de-automatizacion-robotica-de-tareas-202611&utm_content=post-linkedin-1",
+            "llamado_accion": "¿Qué proceso de tu empresa podría beneficiarse de RPA? Consulta la guía completa y descubre cómo empezar.",
+            "texto": "¿Tu empresa está preparada para implementar RPA? Estas prácticas pueden ayudarte a dar el primer paso.\n\nLas mejores prácticas en la implementación RPA son vitales para el éxito del ROI. Algunas de ellas son:\n\nImplementa estrategias diseñadas para proteger los entornos digitales y simplificar el control granular de permisos otorgados a los robots. De igual forma, ten en cuenta que los procesos deben servirse desde un embudo, apoyándote de la automatización de Data Warehouse para procesos simples y para llegar más lejos en procesos más complejos. Procura que en el transcurso de adopción se encuentren mejores formas de automatizar, optimizar y estandarizar procesos que puedan documentarse.\n\nAspectos que conviene considerar:\n\n• Considera el impacto comercial antes de optar por algún proceso a automatizar con RPA.\n\n• Combina RPA atendido y desatendido.\n\n• Define y enfócate en el ROI deseado\n\n¿Qué proceso de tu empresa podría beneficiarse de RPA? Consulta la guía completa y descubre cómo empezar.\n\nhttps://trycore.com/guia-de-automatizacion-con-rpa/?utm_source=linkedin&utm_medium=social-organico&utm_campaign=todo-lo-que-debes-saber-sobre-este-tipo-de-automatizacion-robotica-de-tareas-202611&utm_content=post-linkedin-1",
             "enlace_utm": "https://trycore.com/guia-de-automatizacion-con-rpa/?utm_source=linkedin&utm_medium=social-organico&utm_campaign=todo-lo-que-debes-saber-sobre-este-tipo-de-automatizacion-robotica-de-tareas-202611&utm_content=post-linkedin-1",
             "requiere_revision_humana": true
         },
@@ -134,35 +134,35 @@
                 "numero": 2,
                 "tipo": "contenido",
                 "titulo": "Prepara el proyecto",
-                "texto": "Asigna tiempo suficiente para establecer expectativas, desarrollar un cronograma del proyecto y determinar todos los roles y responsabilidades de los participantes. Así se abordarán posibles riesgos, barreras...",
+                "texto": "Asigna tiempo suficiente para establecer expectativas, desarrollar un cronograma del proyecto y determinar todos los roles y responsabilidades de los participantes.",
                 "fuente": "Asigna tiempo suficiente para establecer expectativas, desarrollar un cronograma del proyecto y determinar todos los roles y responsabilidades de los participantes. Así se abordarán posibles riesgos, barreras y preocupaciones; y evitar la ansiedad por la automatización."
             },
             {
                 "numero": 3,
                 "tipo": "contenido",
                 "titulo": "Identifica casos de uso y potencial de la automatización para tu empresa",
-                "texto": "Prioriza los posibles casos de uso para la automatización en tu proyecto. Selecciona el caso de uso con...",
+                "texto": "Prioriza los posibles casos de uso para la automatización en tu proyecto.",
                 "fuente": "Prioriza los posibles casos de uso para la automatización en tu proyecto. Selecciona el caso de uso con el mayor impacto comercial esperado y asegura la aceptación de las partes interesadas."
             },
             {
                 "numero": 4,
                 "tipo": "contenido",
                 "titulo": "Desarrolla casos comerciales",
-                "texto": "Si te enfocas en los resultados finales, podrás gestionar el riesgo asociado con las implementaciones rápidas. Por lo tanto, un caso de negocio y un modelo de...",
+                "texto": "Si te enfocas en los resultados finales, podrás gestionar el riesgo asociado con las implementaciones rápidas.",
                 "fuente": "Si te enfocas en los resultados finales, podrás gestionar el riesgo asociado con las implementaciones rápidas. Por lo tanto, un caso de negocio y un modelo de ROI en el proceso de RPA seleccionado obtiene una mejor comprensión del rendimiento al final de la implementación. El caso de negocio vincula la automatización robótica con la estrategia de la empresa, mientras que el modelo de ROI ofrece la seguridad de que la inversión producirá resultados deseables."
             },
             {
                 "numero": 5,
                 "tipo": "contenido",
                 "titulo": "Prepara la automatización",
-                "texto": "Prepárate para la automatización. Identifica y registra las oportunidades de automatización y la eficiencia en el proceso que seleccionaste. Asegurará que todas las partes involucradas en él...",
+                "texto": "Prepárate para la automatización. Identifica y registra las oportunidades de automatización y la eficiencia en el proceso que seleccionaste.",
                 "fuente": "Prepárate para la automatización. Identifica y registra las oportunidades de automatización y la eficiencia en el proceso que seleccionaste. Asegurará que todas las partes involucradas en él estén alineados con el flujo de trabajo del estado futuro; además permitirá que se cumplan con todos los pasos requeridos para culminar la tarea correctamente."
             },
             {
                 "numero": 6,
                 "tipo": "contenido",
                 "titulo": "Implementa RPA",
-                "texto": "A través de mejores prácticas puedes preparar tu empresa para el éxito, ya que permite comprender mejor la tecnología de automatización robótica y encontrar áreas adicionales en las...",
+                "texto": "A través de mejores prácticas puedes preparar tu empresa para el éxito.",
                 "fuente": "A través de mejores prácticas puedes preparar tu empresa para el éxito, ya que permite comprender mejor la tecnología de automatización robótica y encontrar áreas adicionales en las cuales esta tecnología puede generar eficiencias."
             },
             {
@@ -258,7 +258,7 @@
             "canal": "linkedin",
             "formato": "post_linkedin",
             "tema": "rpa",
-            "titulo": "Post: ¿Qué debes saber sobre Mejores prácticas de implementación de RPA? Analiza estas recomendaciones.",
+            "titulo": "Post: ¿Tu empresa está preparada para implementar RPA? Estas prácticas pueden ayudarte a dar el primer paso.",
             "estado": "programada"
         },
         {
