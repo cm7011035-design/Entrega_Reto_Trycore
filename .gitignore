@@ -4,3 +4,4 @@ __pycache__/
 .pytest_cache/
 .env
 salidas/respaldo_validador_antiguo.txt
+salidas/calendario_prueba.csv

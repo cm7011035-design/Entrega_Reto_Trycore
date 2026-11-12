@@ -1,0 +1,474 @@
+{
+    "titulo_pieza_madre": "Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
+    "diagnostico": {
+        "indicadores": {
+            "palabras": 3729,
+            "caracteres": 24439,
+            "parrafos": 234,
+            "oraciones": 190,
+            "cifras_identificadas": 15
+        },
+        "cifras": [
+            {
+                "valor": "02",
+                "contexto": "to content\nGuía de Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de l",
+                "requiere_revision": true
+            },
+            {
+                "valor": "11",
+                "contexto": "t\nGuía de Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de la automat",
+                "requiere_revision": true
+            },
+            {
+                "valor": "29",
+                "contexto": "uía de Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de la automatiza",
+                "requiere_revision": true
+            },
+            {
+                "valor": "05",
+                "contexto": "de Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de la automatizació",
+                "requiere_revision": true
+            },
+            {
+                "valor": "00",
+                "contexto": "Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de la automatización RP",
+                "requiere_revision": true
+            },
+            {
+                "valor": "4.0",
+                "contexto": "odología de trabajo y de impulsar de la transformación que propone la industria 4.0, además, es posible obtener un retorno a la inversión tan solo en un año.\nLa au",
+                "requiere_revision": true
+            },
+            {
+                "valor": "100",
+                "contexto": "nará trabajos.\nEsta tecnología es costosa.\nLa precisión del robot de RPA es del 100%.\nRPA está creado solo para reducir costos.\nSolo un desarrollador especializado",
+                "requiere_revision": true
+            },
+            {
+                "valor": "19",
+                "contexto": "portante en todas las industrias actualmente. De cara a la pandemia de la COVID-19 ha explotado su potencial y ha contribuido de forma acertada a luchar contra est",
+                "requiere_revision": true
+            },
+            {
+                "valor": "3",
+                "contexto": "migración de datos.\nPermite predecir la previsión de ingresos.\nTe recomendamos: 3 casos de uso en la Automatización Robótica de Procesos.\n¿Cómo debes elegir un pr",
+                "requiere_revision": true
+            },
+            {
+                "valor": "1",
+                "contexto": "tización robótica exitosamente.\nPor otro lado, también deberás tener en cuenta:\n1. Prepara el proyecto\nAsigna tiempo suficiente para establecer expectativas, des",
+                "requiere_revision": true
+            },
+            {
+                "valor": "2",
+                "contexto": "riesgos, barreras y preocupaciones; y evitar la ansiedad por la automatización.\n2. Identifica casos de uso y potencial de la automatización para tu empresa\nPrior",
+                "requiere_revision": true
+            },
+            {
+                "valor": "3",
+                "contexto": "r impacto comercial esperado y asegura la aceptación de las partes interesadas.\n3. Desarrolla casos comerciales\nSi te enfocas en los resultados finales, podrás g",
+                "requiere_revision": true
+            },
+            {
+                "valor": "4",
+                "contexto": "de ROI ofrece la seguridad de que la inversión producirá resultados deseables.\n4. Prepara la automatización\nPrepárate para la automatización. Identifica y regis",
+                "requiere_revision": true
+            },
+            {
+                "valor": "5",
+                "contexto": "se cumplan con todos los pasos requeridos para culminar la tarea correctamente.\n5. Implementa RPA\nA través de mejores prácticas puedes preparar tu empresa para e",
+                "requiere_revision": true
+            },
+            {
+                "valor": "2022",
+                "contexto": "mos artículos\nCasos de éxito y uso\nPolítica de Cookies\nPolítica de privacidad\n© 2022 TRYCORE SAS. Al navegar y hacer uso de este portal web, acepta el manejo y la ad",
+                "requiere_revision": true
+            }
+        ],
+        "temas": [
+            {
+                "tema": "automatizacion",
+                "menciones": 114
+            },
+            {
+                "tema": "rpa",
+                "menciones": 103
+            },
+            {
+                "tema": "procesos",
+                "menciones": 59
+            },
+            {
+                "tema": "tecnologia",
+                "menciones": 36
+            },
+            {
+                "tema": "medicion",
+                "menciones": 16
+            },
+            {
+                "tema": "productividad",
+                "menciones": 9
+            }
+        ],
+        "alertas": []
+    },
+    "formatos_generados": {
+        "post_linkedin": {
+            "formato": "post_linkedin",
+            "gancho": "¿Qué debes saber sobre Mejores prácticas de implementación de RPA? Analiza estas recomendaciones.",
+            "desarrollo": "Las mejores prácticas en la implementación RPA son vitales para el éxito del ROI. Algunas de ellas son:\n\nImplementa estrategias diseñadas para proteger los entornos digitales y simplificar el control granular de permisos otorgados a los robots. De igual forma, ten en cuenta que los procesos deben servirse desde un embudo, apoyándote de la automatización de Data Warehouse para procesos simples y para llegar más lejos en procesos más complejos. Procura que en el transcurso de adopción se encuentren mejores formas de automatizar, optimizar y estandarizar procesos que puedan documentarse.\n\nAspectos que conviene considerar:\n\n• Considera el impacto comercial antes de optar por algún proceso a automatizar con RPA.\n\n• Combina RPA atendido y desatendido.\n\n• Define y enfócate en el ROI deseado",
+            "llamado_accion": "¿Cómo aplicarías estas recomendaciones en tu organización? Consulta la guía completa: Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
+            "texto": "¿Qué debes saber sobre Mejores prácticas de implementación de RPA? Analiza estas recomendaciones.\n\nLas mejores prácticas en la implementación RPA son vitales para el éxito del ROI. Algunas de ellas son:\n\nImplementa estrategias diseñadas para proteger los entornos digitales y simplificar el control granular de permisos otorgados a los robots. De igual forma, ten en cuenta que los procesos deben servirse desde un embudo, apoyándote de la automatización de Data Warehouse para procesos simples y para llegar más lejos en procesos más complejos. Procura que en el transcurso de adopción se encuentren mejores formas de automatizar, optimizar y estandarizar procesos que puedan documentarse.\n\nAspectos que conviene considerar:\n\n• Considera el impacto comercial antes de optar por algún proceso a automatizar con RPA.\n\n• Combina RPA atendido y desatendido.\n\n• Define y enfócate en el ROI deseado\n\n¿Cómo aplicarías estas recomendaciones en tu organización? Consulta la guía completa: Todo lo que debes saber sobre este tipo de automatización robótica de tareas.\n\nhttps://trycore.com/guia-de-automatizacion-con-rpa/?utm_source=linkedin&utm_medium=social-organico&utm_campaign=todo-lo-que-debes-saber-sobre-este-tipo-de-automatizacion-robotica-de-tareas-202611&utm_content=post-linkedin-1",
+            "enlace_utm": "https://trycore.com/guia-de-automatizacion-con-rpa/?utm_source=linkedin&utm_medium=social-organico&utm_campaign=todo-lo-que-debes-saber-sobre-este-tipo-de-automatizacion-robotica-de-tareas-202611&utm_content=post-linkedin-1",
+            "requiere_revision_humana": true
+        },
+        "carrusel_linkedin": [
+            {
+                "numero": 1,
+                "tipo": "portada",
+                "titulo": "Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
+                "texto": "Conoce los pasos y conceptos principales de este contenido."
+            },
+            {
+                "numero": 2,
+                "tipo": "contenido",
+                "titulo": "Prepara el proyecto",
+                "texto": "Asigna tiempo suficiente para establecer expectativas, desarrollar un cronograma del proyecto y determinar todos los roles y responsabilidades de los participantes. Así se abordarán posibles riesgos, barreras...",
+                "fuente": "Asigna tiempo suficiente para establecer expectativas, desarrollar un cronograma del proyecto y determinar todos los roles y responsabilidades de los participantes. Así se abordarán posibles riesgos, barreras y preocupaciones; y evitar la ansiedad por la automatización."
+            },
+            {
+                "numero": 3,
+                "tipo": "contenido",
+                "titulo": "Identifica casos de uso y potencial de la automatización para tu empresa",
+                "texto": "Prioriza los posibles casos de uso para la automatización en tu proyecto. Selecciona el caso de uso con...",
+                "fuente": "Prioriza los posibles casos de uso para la automatización en tu proyecto. Selecciona el caso de uso con el mayor impacto comercial esperado y asegura la aceptación de las partes interesadas."
+            },
+            {
+                "numero": 4,
+                "tipo": "contenido",
+                "titulo": "Desarrolla casos comerciales",
+                "texto": "Si te enfocas en los resultados finales, podrás gestionar el riesgo asociado con las implementaciones rápidas. Por lo tanto, un caso de negocio y un modelo de...",
+                "fuente": "Si te enfocas en los resultados finales, podrás gestionar el riesgo asociado con las implementaciones rápidas. Por lo tanto, un caso de negocio y un modelo de ROI en el proceso de RPA seleccionado obtiene una mejor comprensión del rendimiento al final de la implementación. El caso de negocio vincula la automatización robótica con la estrategia de la empresa, mientras que el modelo de ROI ofrece la seguridad de que la inversión producirá resultados deseables."
+            },
+            {
+                "numero": 5,
+                "tipo": "contenido",
+                "titulo": "Prepara la automatización",
+                "texto": "Prepárate para la automatización. Identifica y registra las oportunidades de automatización y la eficiencia en el proceso que seleccionaste. Asegurará que todas las partes involucradas en él...",
+                "fuente": "Prepárate para la automatización. Identifica y registra las oportunidades de automatización y la eficiencia en el proceso que seleccionaste. Asegurará que todas las partes involucradas en él estén alineados con el flujo de trabajo del estado futuro; además permitirá que se cumplan con todos los pasos requeridos para culminar la tarea correctamente."
+            },
+            {
+                "numero": 6,
+                "tipo": "contenido",
+                "titulo": "Implementa RPA",
+                "texto": "A través de mejores prácticas puedes preparar tu empresa para el éxito, ya que permite comprender mejor la tecnología de automatización robótica y encontrar áreas adicionales en las...",
+                "fuente": "A través de mejores prácticas puedes preparar tu empresa para el éxito, ya que permite comprender mejor la tecnología de automatización robótica y encontrar áreas adicionales en las cuales esta tecnología puede generar eficiencias."
+            },
+            {
+                "numero": 7,
+                "tipo": "cierre",
+                "titulo": "El siguiente paso comienza contigo",
+                "texto": "Analiza la información y decide cómo aplicarla a tu contexto."
+            }
+        ]
+    },
+    "validaciones": {
+        "post_linkedin": {
+            "formato": "post_linkedin",
+            "valido": true,
+            "resultados": [
+                {
+                    "validacion": "reglas_generales",
+                    "valido": true,
+                    "mensaje": "El contenido cumple las reglas generales."
+                },
+                {
+                    "validacion": "longitud",
+                    "valido": true,
+                    "mensaje": "La extensión cumple las reglas del formato."
+                },
+                {
+                    "validacion": "gancho",
+                    "valido": true,
+                    "mensaje": "El gancho cumple el límite de caracteres."
+                }
+            ],
+            "requiere_revision_humana": true
+        },
+        "carrusel_linkedin": {
+            "formato": "carrusel_linkedin",
+            "valido": true,
+            "resultados": [
+                {
+                    "validacion": "reglas_generales",
+                    "valido": true,
+                    "mensaje": "El contenido cumple las reglas generales."
+                },
+                {
+                    "validacion": "cantidad_laminas",
+                    "valido": true,
+                    "mensaje": "La cantidad de elementos cumple las reglas."
+                },
+                {
+                    "validacion": "palabras_por_lamina",
+                    "valido": true,
+                    "mensaje": "Todos los elementos cumplen el límite de palabras."
+                }
+            ],
+            "requiere_revision_humana": true
+        }
+    },
+    "puntuaciones": {
+        "post_linkedin": {
+            "formato": "post_linkedin",
+            "tema": "rpa",
+            "puntuacion": 61.87,
+            "puntuaciones_metricas": {
+                "impresiones": 67.38,
+                "reacciones": 56.96,
+                "clics": 59.43
+            },
+            "publicaciones_formato": 27,
+            "publicaciones_tema": 10,
+            "nivel_evidencia": "moderada",
+            "estado": "calculado",
+            "explicacion": "Puntuación relativa basada en las medianas históricas del formato y del tema."
+        },
+        "carrusel_linkedin": {
+            "formato": "carrusel_linkedin",
+            "tema": "rpa",
+            "puntuacion": 87.46,
+            "puntuaciones_metricas": {
+                "impresiones": 86.38,
+                "reacciones": 87.31,
+                "clics": 89.06
+            },
+            "publicaciones_formato": 15,
+            "publicaciones_tema": 10,
+            "nivel_evidencia": "moderada",
+            "estado": "calculado",
+            "explicacion": "Puntuación relativa basada en las medianas históricas del formato y del tema."
+        }
+    },
+    "publicaciones_programadas": [
+        {
+            "fecha": "2026-12-03",
+            "hora": "08:30:00",
+            "canal": "linkedin",
+            "formato": "post_linkedin",
+            "tema": "rpa",
+            "titulo": "Post: ¿Qué debes saber sobre Mejores prácticas de implementación de RPA? Analiza estas recomendaciones.",
+            "estado": "programada"
+        },
+        {
+            "fecha": "2026-12-07",
+            "hora": "08:30:00",
+            "canal": "linkedin",
+            "formato": "carrusel_linkedin",
+            "tema": "rpa",
+            "titulo": "Carrusel: Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
+            "estado": "programada"
+        }
+    ],
+    "publicaciones_sin_programar": [],
+    "total_publicaciones_calendario": 6,
+    "analisis_historico": {
+        "total_originales": 63,
+        "total_unicos": 60,
+        "total_duplicados": 3,
+        "duplicados": [
+            {
+                "id_publicacion": "P012",
+                "fecha": "23-abr-2026",
+                "hora": "08:30",
+                "canal": "linkedin",
+                "formato": "post_linkedin",
+                "tema": "oriuno",
+                "palabras": "351",
+                "tiene_cifra": "1",
+                "impresiones": "1053",
+                "reacciones": "18",
+                "comentarios": "2",
+                "clics": "9",
+                "tasa_interaccion": "0,0275"
+            },
+            {
+                "id_publicacion": "P031",
+                "fecha": "2026-07-03",
+                "hora": "15:00",
+                "canal": "linkedin",
+                "formato": "post_linkedin",
+                "tema": "rpa",
+                "palabras": "252",
+                "tiene_cifra": "sí",
+                "impresiones": "386",
+                "reacciones": "9",
+                "comentarios": "1",
+                "clics": "4",
+                "tasa_interaccion": "0,0363"
+            },
+            {
+                "id_publicacion": "P053",
+                "fecha": "06/10/2026",
+                "hora": "15:00",
+                "canal": "linkedin",
+                "formato": "carrusel_linkedin",
+                "tema": "people_service",
+                "palabras": "256",
+                "tiene_cifra": "No",
+                "impresiones": "869",
+                "reacciones": "17",
+                "comentarios": "2",
+                "clics": "8",
+                "tasa_interaccion": "0,0311"
+            }
+        ],
+        "anomalias": [
+            {
+                "id_publicacion": "P007",
+                "problemas": [
+                    "Métrica faltante: comentarios"
+                ]
+            },
+            {
+                "id_publicacion": "P020",
+                "problemas": [
+                    "Métrica faltante: comentarios"
+                ]
+            },
+            {
+                "id_publicacion": "P045",
+                "problemas": [
+                    "Métrica faltante: comentarios"
+                ]
+            }
+        ],
+        "valores_extremos": [
+            {
+                "id_publicacion": "P038",
+                "impresiones": 55397.0,
+                "promedio_historial": 2159.98,
+                "requiere_revision": true
+            }
+        ],
+        "estadisticas_formatos": [
+            {
+                "formato": "post_linkedin",
+                "publicaciones": 27,
+                "promedio_impresiones": 3028.63,
+                "promedio_reacciones": 94.19,
+                "promedio_clics": 45.48
+            },
+            {
+                "formato": "guion_video_corto",
+                "publicaciones": 9,
+                "promedio_impresiones": 1166.67,
+                "promedio_reacciones": 28.33,
+                "promedio_clics": 13.89
+            },
+            {
+                "formato": "infografia",
+                "publicaciones": 9,
+                "promedio_impresiones": 1067.33,
+                "promedio_reacciones": 29.11,
+                "promedio_clics": 14.11
+            },
+            {
+                "formato": "carrusel_linkedin",
+                "publicaciones": 15,
+                "promedio_impresiones": 1848.0,
+                "promedio_reacciones": 58.53,
+                "promedio_clics": 28.27
+            }
+        ],
+        "estadisticas_temas": [
+            {
+                "tema": "docfly",
+                "publicaciones": 12,
+                "promedio_impresiones": 1248.5,
+                "promedio_reacciones": 32.33,
+                "promedio_clics": 15.67
+            },
+            {
+                "tema": "software_factory",
+                "publicaciones": 9,
+                "promedio_impresiones": 1403.56,
+                "promedio_reacciones": 36.44,
+                "promedio_clics": 17.56
+            },
+            {
+                "tema": "people_service",
+                "publicaciones": 12,
+                "promedio_impresiones": 5753.0,
+                "promedio_reacciones": 193.25,
+                "promedio_clics": 93.5
+            },
+            {
+                "tema": "oriuno",
+                "publicaciones": 11,
+                "promedio_impresiones": 1151.73,
+                "promedio_reacciones": 30.64,
+                "promedio_clics": 14.73
+            },
+            {
+                "tema": "rpa",
+                "publicaciones": 10,
+                "promedio_impresiones": 1277.3,
+                "promedio_reacciones": 37.8,
+                "promedio_clics": 18.3
+            },
+            {
+                "tema": "marca",
+                "publicaciones": 6,
+                "promedio_impresiones": 1251.17,
+                "promedio_reacciones": 31.33,
+                "promedio_clics": 15.17
+            }
+        ],
+        "medianas_temas": [
+            {
+                "tema": "docfly",
+                "publicaciones": 12,
+                "mediana_impresiones": 1140.5,
+                "mediana_reacciones": 27.0,
+                "mediana_clics": 13.0
+            },
+            {
+                "tema": "software_factory",
+                "publicaciones": 9,
+                "mediana_impresiones": 1417.0,
+                "mediana_reacciones": 27.0,
+                "mediana_clics": 13.0
+            },
+            {
+                "tema": "people_service",
+                "publicaciones": 12,
+                "mediana_impresiones": 1368.0,
+                "mediana_reacciones": 33.5,
+                "mediana_clics": 16.0
+            },
+            {
+                "tema": "oriuno",
+                "publicaciones": 11,
+                "mediana_impresiones": 1047.0,
+                "mediana_reacciones": 28.0,
+                "mediana_clics": 13.0
+            },
+            {
+                "tema": "rpa",
+                "publicaciones": 10,
+                "mediana_impresiones": 1031.0,
+                "mediana_reacciones": 25.0,
+                "mediana_clics": 12.5
+            },
+            {
+                "tema": "marca",
+                "publicaciones": 6,
+                "mediana_impresiones": 1161.0,
+                "mediana_reacciones": 24.0,
+                "mediana_clics": 11.5
+            }
+        ]
+    }
+}

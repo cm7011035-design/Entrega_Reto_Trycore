@@ -132,3 +132,35 @@ def leer_archivo_local(ruta):
         )
 
     return texto
+
+def leer_html_url(url, timeout=20):
+    """Descarga una página web y devuelve su HTML original."""
+
+    if not url.startswith(("http://", "https://")):
+        raise ValueError(
+            "La URL debe comenzar con http:// o https://"
+        )
+
+    solicitud = Request(
+        url,
+        headers={"User-Agent": "Mozilla/5.0"}
+    )
+
+    try:
+        with urlopen(solicitud, timeout=timeout) as respuesta:
+            contenido = respuesta.read()
+            codificacion = (
+                respuesta.headers.get_content_charset() or "utf-8"
+            )
+
+        return contenido.decode(codificacion, errors="replace")
+
+    except HTTPError as error:
+        raise RuntimeError(
+            f"Error HTTP al consultar la página: {error.code}"
+        ) from error
+
+    except URLError as error:
+        raise RuntimeError(
+            f"No fue posible conectar con la página: {error.reason}"
+        ) from error
