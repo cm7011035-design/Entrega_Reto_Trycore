@@ -104,7 +104,7 @@ def generar_seccion_alertas(resumen):
 def generar_tarjetas_puntuacion(resumen):
     """Genera tarjetas con puntuaciones históricas."""
 
-    puntuaciones = resumen.get("puntuaciones", {})
+    puntuaciones = resumen.get("puntuaciones") or resumen.get("puntuaciones_calendario", {})
 
     tarjetas = ""
 
