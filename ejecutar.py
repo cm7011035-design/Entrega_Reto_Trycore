@@ -302,6 +302,14 @@ def programar_y_guardar(
         publicaciones_rechazadas
     )
 
+    resultado["total_publicaciones_existentes"] = len(
+        originales
+    )
+
+    resultado["total_publicaciones_nuevas"] = len(
+        resultado["programadas"]
+    )
+
     ruta_salida = Path("salidas/calendario.csv")
 
     guardar_calendario(
@@ -381,9 +389,14 @@ def generar_resumen(
             "post_linkedin": formatos["validacion_post"],
             "carrusel_linkedin": formatos["validacion_carrusel"]
         },
-        "puntuaciones": puntuaciones,
-        "publicaciones_programadas": programacion["programadas"],
+                "publicaciones_programadas": programacion["programadas"],
         "publicaciones_sin_programar": programacion["sin_programar"],
+        "total_publicaciones_existentes": programacion[
+            "total_publicaciones_existentes"
+        ],
+        "total_publicaciones_nuevas": programacion[
+            "total_publicaciones_nuevas"
+        ],
         "total_publicaciones_calendario": len(
             programacion["calendario"]
         )

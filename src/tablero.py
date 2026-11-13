@@ -486,7 +486,25 @@ def generar_tablero():
     historial = resumen.get("analisis_historico", {})
 
     total_unicos = historial.get("total_unicos", 0)
+
     total_duplicados = historial.get("total_duplicados", 0)
+
+    total_existentes = resumen.get(
+        "total_publicaciones_existentes", 0
+    )
+
+    total_nuevas = resumen.get(
+        "total_publicaciones_nuevas", 0
+    )
+
+    total_sin_horario = len(
+        resumen.get("publicaciones_sin_programar", [])
+    )
+
+    total_calendario = resumen.get(
+        "total_publicaciones_calendario",
+        len(calendario)
+    )
 
     html = f"""
     <!DOCTYPE html>
@@ -840,6 +858,36 @@ def generar_tablero():
                     <article class="indicador">
                         Duplicados detectados
                         <strong>{total_duplicados}</strong>
+                    </article>
+
+                </div>
+
+            </section>
+
+            <section>
+
+                <h2>Control de programación</h2>
+
+                <div class="indicadores">
+
+                    <article class="indicador">
+                        Publicaciones existentes
+                        <strong>{total_existentes}</strong>
+                    </article>
+
+                    <article class="indicador">
+                        Publicaciones nuevas programadas
+                        <strong>{total_nuevas}</strong>
+                    </article>
+
+                    <article class="indicador">
+                        Publicaciones sin programar
+                        <strong>{total_sin_horario}</strong>
+                    </article>
+
+                    <article class="indicador">
+                        Total de publicaciones en calendario
+                        <strong>{total_calendario}</strong>
                     </article>
 
                 </div>
