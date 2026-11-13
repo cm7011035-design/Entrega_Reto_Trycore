@@ -5,3 +5,7 @@ __pycache__/
 .env
 salidas/respaldo_validador_antiguo.txt
 salidas/calendario_prueba.csv
+# Documentos confidenciales del reto
+00_LEEME.md
+01_INSTRUCCIONES.md
+01_INSTRUCCIONES.pdf

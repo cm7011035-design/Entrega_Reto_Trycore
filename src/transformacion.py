@@ -1,4 +1,6 @@
 
+import re
+
 from src.estructura_contenido import obtener_secciones
 from src.validador import crear_slug, generar_enlace_utm
 
@@ -13,6 +15,9 @@ def generar_post_con_utm(
 ):
     """Genera un post de LinkedIn completo con enlace UTM."""
 
+    if not isinstance(titulo_pieza, str) or not titulo_pieza.strip():
+        raise ValueError("El título de la pieza es obligatorio.")
+
     titulo = titulo_pieza.strip()
     slug = crear_slug(titulo)
 
@@ -26,10 +31,7 @@ def generar_post_con_utm(
         configuracion=configuracion
     )
 
-    post = generar_post_automatico(
-        seccion,
-        titulo_pieza
-    )
+    post = generar_post_automatico(seccion, titulo)
 
     return generar_post_linkedin(
         gancho=post["gancho"],
@@ -42,37 +44,43 @@ def generar_post_con_utm(
 def extraer_pasos_implementacion(elementos):
     """Extrae pasos numerados de un documento estructurado."""
 
-    import re
-
     secciones = obtener_secciones(elementos)
     pasos = []
 
     for seccion in secciones:
-        titulo = seccion["titulo"].strip()
+        titulo = seccion.get("titulo", "").strip()
 
-        coincidencia = re.match(r"^(\d+)\.\s+(.+)", titulo)
+        coincidencia = re.match(
+            r"^(\d+)\.\s+(.+)",
+            titulo
+        )
 
         if not coincidencia:
             continue
 
-        if not seccion["parrafos"]:
+        parrafos = seccion.get("parrafos", [])
+
+        if not parrafos:
+            continue
+
+        descripcion = parrafos[0]
+
+        if not isinstance(descripcion, str) or not descripcion.strip():
             continue
 
         pasos.append({
             "numero": int(coincidencia.group(1)),
             "titulo": coincidencia.group(2).strip(),
-            "descripcion": seccion["parrafos"][0]
+            "descripcion": descripcion.strip()
         })
 
     return pasos
 
 
 def generar_carrusel(pasos, tema=""):
-    """Construye un carrusel con resúmenes de máximo 30 palabras."""
+    """Construye un carrusel basado en contenido de la fuente."""
 
-    import re
-
-    if not 5 <= len(pasos) <= 8:
+    if not isinstance(pasos, list) or not 5 <= len(pasos) <= 8:
         raise ValueError(
             "El carrusel requiere entre cinco y ocho pasos."
         )
@@ -80,23 +88,19 @@ def generar_carrusel(pasos, tema=""):
     def resumir(texto, limite=25):
         """Prioriza oraciones completas sin superar el límite."""
 
-        texto = texto.strip()
+        if not isinstance(texto, str):
+            return "Consulta este paso en la guía original."
+
+        texto = " ".join(texto.split())
 
         if not texto:
             return "Consulta este paso en la guía original."
 
-        oraciones = re.split(
-            r'(?<=[.!?])\s+',
-            texto
-        )
-
+        oraciones = re.split(r"(?<=[.!?])\s+", texto)
         resultado = ""
 
-        # Primero intenta conservar varias oraciones completas.
         for oracion in oraciones:
-            propuesta = (
-                resultado + " " + oracion
-            ).strip()
+            propuesta = (resultado + " " + oracion).strip()
 
             if len(propuesta.split()) <= limite:
                 resultado = propuesta
@@ -106,46 +110,64 @@ def generar_carrusel(pasos, tema=""):
         if resultado:
             return resultado
 
-        # Busca otra oración completa que pueda utilizarse.
         for oracion in oraciones:
             if len(oracion.split()) <= limite:
                 return oracion.strip()
 
-        # Si ninguna oración cabe, busca una idea completa
-        # separada por comas, punto y coma o dos puntos.
         for oracion in oraciones:
             fragmentos = re.split(r"[,;:]", oracion)
 
             for fragmento in fragmentos:
                 fragmento = fragmento.strip()
 
-                if len(fragmento.split()) <= limite:
-                    if fragmento:
-                        return fragmento.rstrip(".,;:!?") + "."
+                if (
+                    fragmento
+                    and len(fragmento.split()) <= limite
+                ):
+                    return fragmento.rstrip(".,;:!?") + "."
 
-        # Último recurso: utiliza las primeras palabras disponibles.
         palabras = texto.split()
 
         return " ".join(
             palabras[:limite]
         ).rstrip(".,;:!?") + "."
 
-    titulo_tema = tema.strip() or "Ideas principales"
+    titulo_portada = (
+        tema.strip()
+        if isinstance(tema, str) and tema.strip()
+        else "Ideas principales"
+    )
+
+    palabras_titulo = titulo_portada.split()
+
+    if len(palabras_titulo) > 18:
+        titulo_portada = " ".join(palabras_titulo[:17]) + "..."
 
     diapositivas = [
         {
             "numero": 1,
             "tipo": "portada",
-            "titulo": titulo_tema,
+            "titulo": titulo_portada,
             "texto": (
-                "Conoce los pasos y conceptos principales "
-                "de este contenido."
+                "Conoce los principales pasos y recomendaciones "
+                "extraídos de esta pieza de contenido."
             )
         }
     ]
 
     for paso in pasos:
-        titulo = paso["titulo"].strip()
+        if not isinstance(paso, dict):
+            raise ValueError(
+                "Cada paso del carrusel debe ser un diccionario."
+            )
+
+        titulo = paso.get("titulo", "").strip()
+        descripcion = paso.get("descripcion", "")
+
+        if not titulo:
+            raise ValueError(
+                "Cada paso del carrusel necesita un título."
+            )
 
         palabras_disponibles = 30 - len(titulo.split())
 
@@ -155,7 +177,7 @@ def generar_carrusel(pasos, tema=""):
             )
 
         texto_resumido = resumir(
-            paso["descripcion"],
+            descripcion,
             limite=palabras_disponibles
         )
 
@@ -164,7 +186,7 @@ def generar_carrusel(pasos, tema=""):
             "tipo": "contenido",
             "titulo": titulo,
             "texto": texto_resumido,
-            "fuente": paso["descripcion"]
+            "fuente": descripcion
         })
 
     diapositivas.append({
@@ -180,13 +202,17 @@ def generar_carrusel(pasos, tema=""):
     return diapositivas
 
 
+
+
 def generar_post_linkedin(
     gancho,
     desarrollo,
     llamado_accion,
     enlace_utm
 ):
-    """Construye un post de LinkedIn con saltos de línea."""
+    """Construye un post de LinkedIn respetando 1300 caracteres
+    y evitando cortar párrafos o recomendaciones a la mitad.
+    """
 
     partes = {
         "gancho": gancho,
@@ -206,22 +232,110 @@ def generar_post_linkedin(
     llamado_accion = llamado_accion.strip()
     enlace_utm = enlace_utm.strip()
 
-    texto = "\n\n".join([
+    separador = "\n\n"
+    limite = 1300
+
+    espacio_desarrollo = (
+        limite
+        - len(gancho)
+        - len(llamado_accion)
+        - len(enlace_utm)
+        - len(separador) * 3
+    )
+
+    if espacio_desarrollo < 1:
+        raise ValueError(
+            "El gancho, llamado a la acción y enlace UTM "
+            "superan el límite permitido."
+        )
+
+    bloques = [
+        bloque.strip()
+        for bloque in desarrollo.split(separador)
+        if bloque.strip()
+    ]
+
+    bloques_finales = []
+    indice = 0
+
+    while indice < len(bloques):
+        bloque = bloques[indice]
+
+        # Agrupa el encabezado con sus recomendaciones.
+        if (
+            bloque.endswith(":")
+            and indice + 1 < len(bloques)
+            and bloques[indice + 1].startswith("• ")
+        ):
+            encabezado = bloque
+            recomendaciones = []
+            siguiente = indice + 1
+
+            while (
+                siguiente < len(bloques)
+                and bloques[siguiente].startswith("• ")
+            ):
+                recomendacion = bloques[siguiente]
+
+                candidato = "\n\n".join(
+                    bloques_finales
+                    + [encabezado]
+                    + recomendaciones
+                    + [recomendacion]
+                )
+
+                if len(candidato) > espacio_desarrollo:
+                    break
+
+                recomendaciones.append(recomendacion)
+                siguiente += 1
+
+            if recomendaciones:
+                bloques_finales.append(encabezado)
+                bloques_finales.extend(recomendaciones)
+
+            indice = siguiente if recomendaciones else indice + 1
+            continue
+
+        candidato = "\n\n".join(
+            bloques_finales + [bloque]
+        )
+
+        if len(candidato) > espacio_desarrollo:
+            break
+
+        bloques_finales.append(bloque)
+        indice += 1
+
+    desarrollo_final = "\n\n".join(bloques_finales)
+
+    if not desarrollo_final:
+        raise ValueError(
+            "No hay espacio suficiente para incluir un desarrollo completo."
+        )
+
+    texto = separador.join([
         gancho,
-        desarrollo,
+        desarrollo_final,
         llamado_accion,
         enlace_utm
     ])
 
+    if len(texto) > limite:
+        raise ValueError(
+            "El post supera el límite de 1300 caracteres."
+        )
+
     return {
         "formato": "post_linkedin",
         "gancho": gancho,
-        "desarrollo": desarrollo,
+        "desarrollo": desarrollo_final,
         "llamado_accion": llamado_accion,
         "texto": texto,
         "enlace_utm": enlace_utm,
         "requiere_revision_humana": True
     }
+
 
 
 def seleccionar_seccion_principal(elementos):
@@ -265,82 +379,99 @@ def seleccionar_seccion_principal(elementos):
 
 
 def generar_desarrollo_post(seccion, max_recomendaciones=3):
-    """Construye el desarrollo de un post a partir de una sección."""
+    """Construye el desarrollo con información disponible de la fuente."""
+
+    if not seccion:
+        raise ValueError(
+            "No existe una sección principal para generar el post."
+        )
+
+    if not isinstance(max_recomendaciones, int) or max_recomendaciones < 0:
+        raise ValueError(
+            "El máximo de recomendaciones debe ser un entero no negativo."
+        )
 
     parrafos = [
-        texto.strip()
-        for texto in seccion["parrafos"]
-        if texto.strip()
+        " ".join(texto.split())
+        for texto in seccion.get("parrafos", [])
+        if isinstance(texto, str)
+        and texto.strip()
         and "te podría interesar" not in texto.lower()
     ]
 
     listas = [
-        texto.strip()
-        for texto in seccion["listas"]
-        if texto.strip()
+        " ".join(texto.split())
+        for texto in seccion.get("listas", [])
+        if isinstance(texto, str) and texto.strip()
     ]
 
-    if not parrafos:
+    if not parrafos and not listas:
         raise ValueError(
-            "La sección no contiene párrafos para desarrollar el post."
+            "La sección no contiene información suficiente para el post."
         )
 
-    if not listas:
-        raise ValueError(
-            "La sección no contiene recomendaciones o elementos de apoyo."
+    parrafos_unicos = list(dict.fromkeys(parrafos))
+    listas_unicas = list(dict.fromkeys(listas))
+
+    partes = []
+
+    partes.extend(parrafos_unicos[:2])
+
+    if listas_unicas and max_recomendaciones > 0:
+        partes.append("Recomendaciones clave:")
+
+        partes.extend(
+            f"• {recomendacion}"
+            for recomendacion in listas_unicas[:max_recomendaciones]
         )
 
-    introduccion = parrafos[0]
+    elif len(parrafos_unicos) > 2:
+        partes.append("Otros aspectos del contenido:")
 
-    explicacion = (
-        parrafos[1]
-        if len(parrafos) > 1
-        else ""
-    )
+        partes.extend(
+            parrafos_unicos[2:2 + max_recomendaciones]
+        )
 
-    recomendaciones = listas[:max_recomendaciones]
+    return "\n\n".join(partes)
 
-    partes = [
-        introduccion,
-        explicacion,
-        "Aspectos que conviene considerar:"
-    ]
-
-    partes.extend(
-        f"• {recomendacion}"
-        for recomendacion in recomendaciones
-    )
-
-    return "\n\n".join(
-        parte for parte in partes if parte
-    )
 
 
 def generar_gancho_post(seccion):
-    """Genera un gancho atractivo para LinkedIn."""
+    """Genera un gancho natural basado en el título de la fuente."""
 
-    titulo = seccion["titulo"].strip()
+    if not seccion:
+        raise ValueError(
+            "Se necesita una sección para generar el gancho."
+        )
+
+    titulo = seccion.get("titulo", "").strip()
 
     if not titulo:
-        raise ValueError("La sección necesita un título.")
+        raise ValueError(
+            "La sección necesita un título."
+        )
+
+    titulo = titulo.rstrip(" .!?")
 
     return (
-        "¿Tu empresa está preparada para implementar RPA? "
-        "Estas prácticas pueden ayudarte a dar el primer paso."
+        f"¿Quieres conocer las claves de {titulo}? "
+        "Descubre sus aspectos más importantes y recomendaciones."
     )
 
 
 def generar_llamado_accion(titulo):
-    """Genera un llamado a la acción breve y natural."""
+    """Genera una invitación relacionada con el contenido."""
 
-    if not titulo or not titulo.strip():
+    if not isinstance(titulo, str) or not titulo.strip():
         raise ValueError(
             "Se necesita un título para generar el llamado."
         )
 
+    titulo = titulo.strip().rstrip(" .!?")
+
     return (
-        "¿Qué proceso de tu empresa podría beneficiarse de RPA? "
-        "Consulta la guía completa y descubre cómo empezar."
+        f"¿Quieres conocer más sobre {titulo}? "
+        "Consulta el contenido completo y descubre sus recomendaciones."
     )
 
 
@@ -356,9 +487,7 @@ def generar_post_automatico(seccion, titulo_pieza=None):
         else seccion["titulo"]
     )
 
-    llamado_accion = generar_llamado_accion(
-        titulo_referencia
-    )
+    llamado_accion = generar_llamado_accion(titulo_referencia)
 
     return {
         "gancho": gancho,

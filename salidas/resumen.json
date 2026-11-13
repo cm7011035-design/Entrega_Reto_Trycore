@@ -1,87 +1,24 @@
 {
     "titulo_pieza_madre": "Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
+    "fuente_utilizada": "url",
+    "tema_detectado": "automatizacion",
+    "disponibilidad_historica": {
+        "disponible": false,
+        "publicaciones": 0,
+        "mensaje": "No existe historial para este tema."
+    },
     "diagnostico": {
         "indicadores": {
             "palabras": 3729,
             "caracteres": 24439,
             "parrafos": 234,
             "oraciones": 190,
-            "cifras_identificadas": 15
+            "cifras_identificadas": 1
         },
         "cifras": [
             {
-                "valor": "02",
-                "contexto": "to content\nGuía de Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de l",
-                "requiere_revision": true
-            },
-            {
-                "valor": "11",
-                "contexto": "t\nGuía de Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de la automat",
-                "requiere_revision": true
-            },
-            {
-                "valor": "29",
-                "contexto": "uía de Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de la automatiza",
-                "requiere_revision": true
-            },
-            {
-                "valor": "05",
-                "contexto": "de Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de la automatizació",
-                "requiere_revision": true
-            },
-            {
-                "valor": "00",
-                "contexto": "Automatización Robótica de Procesos RPAEditorial Trycore2023-02-13T15:11:29-05:00\nÍndice de contenidos\nInicio\n¿Qué es RPA?\nCaracterísticas de la automatización RP",
-                "requiere_revision": true
-            },
-            {
-                "valor": "4.0",
-                "contexto": "odología de trabajo y de impulsar de la transformación que propone la industria 4.0, además, es posible obtener un retorno a la inversión tan solo en un año.\nLa au",
-                "requiere_revision": true
-            },
-            {
-                "valor": "100",
-                "contexto": "nará trabajos.\nEsta tecnología es costosa.\nLa precisión del robot de RPA es del 100%.\nRPA está creado solo para reducir costos.\nSolo un desarrollador especializado",
-                "requiere_revision": true
-            },
-            {
-                "valor": "19",
-                "contexto": "portante en todas las industrias actualmente. De cara a la pandemia de la COVID-19 ha explotado su potencial y ha contribuido de forma acertada a luchar contra est",
-                "requiere_revision": true
-            },
-            {
-                "valor": "3",
-                "contexto": "migración de datos.\nPermite predecir la previsión de ingresos.\nTe recomendamos: 3 casos de uso en la Automatización Robótica de Procesos.\n¿Cómo debes elegir un pr",
-                "requiere_revision": true
-            },
-            {
-                "valor": "1",
-                "contexto": "tización robótica exitosamente.\nPor otro lado, también deberás tener en cuenta:\n1. Prepara el proyecto\nAsigna tiempo suficiente para establecer expectativas, des",
-                "requiere_revision": true
-            },
-            {
-                "valor": "2",
-                "contexto": "riesgos, barreras y preocupaciones; y evitar la ansiedad por la automatización.\n2. Identifica casos de uso y potencial de la automatización para tu empresa\nPrior",
-                "requiere_revision": true
-            },
-            {
-                "valor": "3",
-                "contexto": "r impacto comercial esperado y asegura la aceptación de las partes interesadas.\n3. Desarrolla casos comerciales\nSi te enfocas en los resultados finales, podrás g",
-                "requiere_revision": true
-            },
-            {
-                "valor": "4",
-                "contexto": "de ROI ofrece la seguridad de que la inversión producirá resultados deseables.\n4. Prepara la automatización\nPrepárate para la automatización. Identifica y regis",
-                "requiere_revision": true
-            },
-            {
-                "valor": "5",
-                "contexto": "se cumplan con todos los pasos requeridos para culminar la tarea correctamente.\n5. Implementa RPA\nA través de mejores prácticas puedes preparar tu empresa para e",
-                "requiere_revision": true
-            },
-            {
-                "valor": "2022",
-                "contexto": "mos artículos\nCasos de éxito y uso\nPolítica de Cookies\nPolítica de privacidad\n© 2022 TRYCORE SAS. Al navegar y hacer uso de este portal web, acepta el manejo y la ad",
+                "valor": "100%",
+                "contexto": "La precisión del robot de RPA es del 100%.",
                 "requiere_revision": true
             }
         ],
@@ -111,15 +48,17 @@
                 "menciones": 9
             }
         ],
-        "alertas": []
+        "alertas": [
+            "Se identificaron cifras que requieren verificación de su fuente."
+        ]
     },
     "formatos_generados": {
         "post_linkedin": {
             "formato": "post_linkedin",
-            "gancho": "¿Tu empresa está preparada para implementar RPA? Estas prácticas pueden ayudarte a dar el primer paso.",
-            "desarrollo": "Las mejores prácticas en la implementación RPA son vitales para el éxito del ROI. Algunas de ellas son:\n\nImplementa estrategias diseñadas para proteger los entornos digitales y simplificar el control granular de permisos otorgados a los robots. De igual forma, ten en cuenta que los procesos deben servirse desde un embudo, apoyándote de la automatización de Data Warehouse para procesos simples y para llegar más lejos en procesos más complejos. Procura que en el transcurso de adopción se encuentren mejores formas de automatizar, optimizar y estandarizar procesos que puedan documentarse.\n\nAspectos que conviene considerar:\n\n• Considera el impacto comercial antes de optar por algún proceso a automatizar con RPA.\n\n• Combina RPA atendido y desatendido.\n\n• Define y enfócate en el ROI deseado",
-            "llamado_accion": "¿Qué proceso de tu empresa podría beneficiarse de RPA? Consulta la guía completa y descubre cómo empezar.",
-            "texto": "¿Tu empresa está preparada para implementar RPA? Estas prácticas pueden ayudarte a dar el primer paso.\n\nLas mejores prácticas en la implementación RPA son vitales para el éxito del ROI. Algunas de ellas son:\n\nImplementa estrategias diseñadas para proteger los entornos digitales y simplificar el control granular de permisos otorgados a los robots. De igual forma, ten en cuenta que los procesos deben servirse desde un embudo, apoyándote de la automatización de Data Warehouse para procesos simples y para llegar más lejos en procesos más complejos. Procura que en el transcurso de adopción se encuentren mejores formas de automatizar, optimizar y estandarizar procesos que puedan documentarse.\n\nAspectos que conviene considerar:\n\n• Considera el impacto comercial antes de optar por algún proceso a automatizar con RPA.\n\n• Combina RPA atendido y desatendido.\n\n• Define y enfócate en el ROI deseado\n\n¿Qué proceso de tu empresa podría beneficiarse de RPA? Consulta la guía completa y descubre cómo empezar.\n\nhttps://trycore.com/guia-de-automatizacion-con-rpa/?utm_source=linkedin&utm_medium=social-organico&utm_campaign=todo-lo-que-debes-saber-sobre-este-tipo-de-automatizacion-robotica-de-tareas-202611&utm_content=post-linkedin-1",
+            "gancho": "¿Quieres conocer las claves de Mejores prácticas de implementación de RPA? Descubre sus aspectos más importantes y recomendaciones.",
+            "desarrollo": "Las mejores prácticas en la implementación RPA son vitales para el éxito del ROI. Algunas de ellas son:\n\nImplementa estrategias diseñadas para proteger los entornos digitales y simplificar el control granular de permisos otorgados a los robots. De igual forma, ten en cuenta que los procesos deben servirse desde un embudo, apoyándote de la automatización de Data Warehouse para procesos simples y para llegar más lejos en procesos más complejos. Procura que en el transcurso de adopción se encuentren mejores formas de automatizar, optimizar y estandarizar procesos que puedan documentarse.\n\nRecomendaciones clave:\n\n• Considera el impacto comercial antes de optar por algún proceso a automatizar con RPA.\n\n• Combina RPA atendido y desatendido.",
+            "llamado_accion": "¿Quieres conocer más sobre Todo lo que debes saber sobre este tipo de automatización robótica de tareas? Consulta el contenido completo y descubre sus recomendaciones.",
+            "texto": "¿Quieres conocer las claves de Mejores prácticas de implementación de RPA? Descubre sus aspectos más importantes y recomendaciones.\n\nLas mejores prácticas en la implementación RPA son vitales para el éxito del ROI. Algunas de ellas son:\n\nImplementa estrategias diseñadas para proteger los entornos digitales y simplificar el control granular de permisos otorgados a los robots. De igual forma, ten en cuenta que los procesos deben servirse desde un embudo, apoyándote de la automatización de Data Warehouse para procesos simples y para llegar más lejos en procesos más complejos. Procura que en el transcurso de adopción se encuentren mejores formas de automatizar, optimizar y estandarizar procesos que puedan documentarse.\n\nRecomendaciones clave:\n\n• Considera el impacto comercial antes de optar por algún proceso a automatizar con RPA.\n\n• Combina RPA atendido y desatendido.\n\n¿Quieres conocer más sobre Todo lo que debes saber sobre este tipo de automatización robótica de tareas? Consulta el contenido completo y descubre sus recomendaciones.\n\nhttps://trycore.com/guia-de-automatizacion-con-rpa/?utm_source=linkedin&utm_medium=social-organico&utm_campaign=todo-lo-que-debes-saber-sobre-este-tipo-de-automatizacion-robotica-de-tareas-202611&utm_content=post-linkedin-1",
             "enlace_utm": "https://trycore.com/guia-de-automatizacion-con-rpa/?utm_source=linkedin&utm_medium=social-organico&utm_campaign=todo-lo-que-debes-saber-sobre-este-tipo-de-automatizacion-robotica-de-tareas-202611&utm_content=post-linkedin-1",
             "requiere_revision_humana": true
         },
@@ -128,7 +67,7 @@
                 "numero": 1,
                 "tipo": "portada",
                 "titulo": "Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
-                "texto": "Conoce los pasos y conceptos principales de este contenido."
+                "texto": "Conoce los principales pasos y recomendaciones extraídos de esta pieza de contenido."
             },
             {
                 "numero": 2,
@@ -222,52 +161,54 @@
     "puntuaciones": {
         "post_linkedin": {
             "formato": "post_linkedin",
-            "tema": "rpa",
-            "puntuacion": 61.87,
+            "tema": "automatizacion",
+            "puntuacion": 48.81,
             "puntuaciones_metricas": {
-                "impresiones": 67.38,
-                "reacciones": 56.96,
-                "clics": 59.43
+                "impresiones": 62.0,
+                "reacciones": 39.29,
+                "clics": 40.74
             },
             "publicaciones_formato": 27,
-            "publicaciones_tema": 10,
-            "nivel_evidencia": "moderada",
+            "publicaciones_tema": 0,
+            "nivel_evidencia": "sólida",
+            "fuente_puntuacion": "solo formato",
             "estado": "calculado",
-            "explicacion": "Puntuación relativa basada en las medianas históricas del formato y del tema."
+            "explicacion": "Puntuación relativa basada únicamente en las medianas históricas del formato. No existe historial suficiente del tema para compararlo."
         },
         "carrusel_linkedin": {
             "formato": "carrusel_linkedin",
-            "tema": "rpa",
-            "puntuacion": 87.46,
+            "tema": "automatizacion",
+            "puntuacion": 100.0,
             "puntuaciones_metricas": {
-                "impresiones": 86.38,
-                "reacciones": 87.31,
-                "clics": 89.06
+                "impresiones": 100.0,
+                "reacciones": 100.0,
+                "clics": 100.0
             },
             "publicaciones_formato": 15,
-            "publicaciones_tema": 10,
-            "nivel_evidencia": "moderada",
+            "publicaciones_tema": 0,
+            "nivel_evidencia": "sólida",
+            "fuente_puntuacion": "solo formato",
             "estado": "calculado",
-            "explicacion": "Puntuación relativa basada en las medianas históricas del formato y del tema."
+            "explicacion": "Puntuación relativa basada únicamente en las medianas históricas del formato. No existe historial suficiente del tema para compararlo."
         }
     },
     "publicaciones_programadas": [
         {
-            "fecha": "2026-12-03",
+            "fecha": "2026-11-30",
             "hora": "08:30:00",
             "canal": "linkedin",
             "formato": "post_linkedin",
-            "tema": "rpa",
-            "titulo": "Post: ¿Tu empresa está preparada para implementar RPA? Estas prácticas pueden ayudarte a dar el primer paso.",
+            "tema": "automatizacion",
+            "titulo": "Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
             "estado": "programada"
         },
         {
-            "fecha": "2026-12-07",
+            "fecha": "2026-12-02",
             "hora": "08:30:00",
             "canal": "linkedin",
             "formato": "carrusel_linkedin",
-            "tema": "rpa",
-            "titulo": "Carrusel: Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
+            "tema": "automatizacion",
+            "titulo": "Todo lo que debes saber sobre este tipo de automatización robótica de tareas.",
             "estado": "programada"
         }
     ],

@@ -1,9 +1,9 @@
+
 from pathlib import Path
 import json
 
 from src.configuracion import cargar_configuracion
 from src.lector_fuente import leer_html_url, extraer_texto_html
-
 from src.estructura_contenido import extraer_estructura_html
 from src.diagnostico import diagnosticar_contenido
 
@@ -14,6 +14,7 @@ from src.transformacion import (
     generar_carrusel,
     generar_post_con_utm
 )
+
 from src.validador_formatos import validar_formato
 
 from src.calendario import (
@@ -25,23 +26,67 @@ from src.calendario import (
     guardar_calendario
 )
 
-from src.puntuacion import calificar_publicacion
+from src.puntuacion import (
+    calificar_publicacion,
+    obtener_datos_historicos
+)
 
 from src.historial import analizar_historial
 from src.tablero import guardar_tablero
 
+
 def cargar_pieza_madre():
-    """Lee y prepara la pieza madre desde la URL configurada."""
+    """Lee la pieza madre desde la URL o utiliza el HTML de respaldo."""
 
     ruta_url = Path("02_insumos/pieza_madre/url.txt")
+    ruta_respaldo = Path(
+        "02_insumos/pieza_madre/guia_rpa_respaldo.html"
+    )
 
     url = ruta_url.read_text(
         encoding="utf-8"
     ).strip()
 
-    html = leer_html_url(url)
+    if not url:
+        raise ValueError("El archivo url.txt está vacío.")
 
-    texto = extraer_texto_html(html)
+    fuente_utilizada = "url"
+
+    try:
+        html = leer_html_url(url)
+        texto = extraer_texto_html(html)
+
+        if not texto.strip():
+            raise RuntimeError(
+                "La URL no contiene texto extraíble."
+            )
+
+    except (RuntimeError, ValueError, OSError) as error:
+
+        print("\nAVISO: No fue posible utilizar la URL.")
+        print("Motivo:", error)
+        print("Intentando utilizar el archivo de respaldo...")
+
+        if not ruta_respaldo.exists():
+            raise FileNotFoundError(
+                "La URL falló y no existe el archivo de respaldo."
+            )
+
+        html = ruta_respaldo.read_text(
+            encoding="utf-8",
+            errors="replace"
+        )
+
+        texto = extraer_texto_html(html)
+
+        if not texto.strip():
+            raise ValueError(
+                "El archivo de respaldo no contiene texto extraíble."
+            )
+
+        fuente_utilizada = "respaldo"
+
+        print("Respaldo cargado correctamente.")
 
     elementos = extraer_estructura_html(html)
 
@@ -61,8 +106,55 @@ def cargar_pieza_madre():
         "titulo": titulo,
         "diagnostico": diagnostico,
         "seccion_principal": seccion,
-        "pasos": pasos
+        "pasos": pasos,
+        "fuente_utilizada": fuente_utilizada
     }
+
+
+def seleccionar_tema_principal(diagnostico):
+    """
+    Selecciona el tema con más menciones en el diagnóstico.
+    No utiliza un tema fijo.
+    """
+
+    temas = diagnostico.get("temas", [])
+
+    if not temas:
+        return "sin_clasificar"
+
+    tema_principal = max(
+        temas,
+        key=lambda elemento: elemento["menciones"]
+    )
+
+    return tema_principal["tema"]
+
+
+def consultar_disponibilidad_historica(tema):
+    """
+    Comprueba si el tema detectado existe en el historial.
+    No reemplaza el tema si no encuentra coincidencias.
+    """
+
+    datos = obtener_datos_historicos()
+
+    disponible = tema in datos["temas"]
+
+    if disponible:
+        publicaciones = datos["temas"][tema]["publicaciones"]
+    else:
+        publicaciones = 0
+
+    return {
+        "disponible": disponible,
+        "publicaciones": publicaciones,
+        "mensaje": (
+            "Existe información histórica para este tema."
+            if disponible
+            else "No existe historial para este tema."
+        )
+    }
+
 
 def generar_formatos(pieza, configuracion, fecha):
     """Genera y valida los formatos derivados de la pieza madre."""
@@ -109,26 +201,85 @@ def generar_formatos(pieza, configuracion, fecha):
         "validacion_carrusel": validacion_carrusel
     }
 
-def preparar_publicaciones(formato_generado, tema):
-    """Prepara los contenidos para enviarlos al calendario."""
 
-    return [
+def preparar_publicaciones(
+    formato_generado,
+    tema,
+    titulo_pieza=None
+):
+    """Separa los formatos válidos de los rechazados."""
+
+    publicaciones_validas = []
+    publicaciones_rechazadas = []
+
+    titulo_post = (
+        titulo_pieza
+        or formato_generado["post"]["gancho"]
+    )
+
+    titulo_carrusel = (
+        titulo_pieza
+        or formato_generado["carrusel"][0]["titulo"]
+    )
+
+    candidatos = [
         {
             "tema": tema,
             "canal": "linkedin",
             "formato": "post_linkedin",
-            "titulo": "Post: " + formato_generado["post"]["gancho"]
+            "titulo": titulo_post,
+            "validacion": formato_generado["validacion_post"]
         },
         {
             "tema": tema,
             "canal": "linkedin",
             "formato": "carrusel_linkedin",
-            "titulo": "Carrusel: " + formato_generado["carrusel"][0]["titulo"]
+            "titulo": titulo_carrusel,
+            "validacion": formato_generado["validacion_carrusel"]
         }
     ]
 
-def programar_y_guardar(publicaciones_nuevas):
-    """Programa las publicaciones y guarda el calendario resultante."""
+    for publicacion in candidatos:
+
+        validacion = publicacion["validacion"]
+
+        if validacion["valido"]:
+
+            publicacion.pop("validacion")
+
+            publicaciones_validas.append(publicacion)
+
+        else:
+
+            errores = [
+                resultado["mensaje"]
+                for resultado in validacion["resultados"]
+                if not resultado["valido"]
+            ]
+
+            publicaciones_rechazadas.append({
+                "tema": publicacion["tema"],
+                "canal": publicacion["canal"],
+                "formato": publicacion["formato"],
+                "titulo": publicacion["titulo"],
+                "estado": "rechazada_por_validacion",
+                "motivo": " | ".join(errores)
+            })
+
+    return {
+        "publicaciones_validas": publicaciones_validas,
+        "publicaciones_rechazadas": publicaciones_rechazadas
+    }
+
+
+def programar_y_guardar(
+    publicaciones_nuevas,
+    publicaciones_rechazadas=None
+):
+    """Programa solamente publicaciones que superaron la validación."""
+
+    if publicaciones_rechazadas is None:
+        publicaciones_rechazadas = []
 
     ventana = cargar_ventana()
 
@@ -147,6 +298,10 @@ def programar_y_guardar(publicaciones_nuevas):
         reglas
     )
 
+    resultado["sin_programar"].extend(
+        publicaciones_rechazadas
+    )
+
     ruta_salida = Path("salidas/calendario.csv")
 
     guardar_calendario(
@@ -156,8 +311,9 @@ def programar_y_guardar(publicaciones_nuevas):
 
     return resultado
 
+
 def calificar_formatos(tema):
-    """Calcula las puntuaciones históricas de los formatos generados."""
+    """Calcula las puntuaciones históricas del tema detectado."""
 
     puntuacion_post = calificar_publicacion(
         "post_linkedin",
@@ -174,11 +330,22 @@ def calificar_formatos(tema):
         "carrusel_linkedin": puntuacion_carrusel
     }
 
-def generar_resumen(pieza, formatos, programacion, puntuaciones):
+
+def generar_resumen(
+    pieza,
+    formatos,
+    programacion,
+    puntuaciones,
+    tema,
+    disponibilidad_historica
+):
     """Reúne los resultados principales del proceso."""
 
     return {
         "titulo_pieza_madre": pieza["titulo"],
+        "fuente_utilizada": pieza["fuente_utilizada"],
+        "tema_detectado": tema,
+        "disponibilidad_historica": disponibilidad_historica,
         "diagnostico": pieza["diagnostico"],
         "formatos_generados": {
             "post_linkedin": formatos["post"],
@@ -196,6 +363,7 @@ def generar_resumen(pieza, formatos, programacion, puntuaciones):
         )
     }
 
+
 def ejecutar_proceso():
     """Ejecuta el flujo completo de automatización de mercadeo."""
 
@@ -204,6 +372,20 @@ def ejecutar_proceso():
     configuracion = cargar_configuracion()
 
     pieza = cargar_pieza_madre()
+
+    tema = seleccionar_tema_principal(
+        pieza["diagnostico"]
+    )
+
+    disponibilidad_historica = consultar_disponibilidad_historica(
+        tema
+    )
+
+    print("Tema detectado:", tema)
+    print(
+        "Historial disponible:",
+        disponibilidad_historica["disponible"]
+    )
 
     ventana = cargar_ventana()
 
@@ -217,14 +399,16 @@ def ejecutar_proceso():
 
     publicaciones = preparar_publicaciones(
         formatos,
-        "rpa"
+        tema,
+        pieza["titulo"]
     )
 
     programacion = programar_y_guardar(
-        publicaciones
+        publicaciones["publicaciones_validas"],
+        publicaciones["publicaciones_rechazadas"]
     )
 
-    puntuaciones = calificar_formatos("rpa")
+    puntuaciones = calificar_formatos(tema)
 
     historial = analizar_historial()
 
@@ -232,7 +416,9 @@ def ejecutar_proceso():
         pieza,
         formatos,
         programacion,
-        puntuaciones
+        puntuaciones,
+        tema,
+        disponibilidad_historica
     )
 
     resumen["analisis_historico"] = historial
@@ -254,12 +440,14 @@ def ejecutar_proceso():
     print("Tablero generado:", ruta_tablero)
 
     print("\nPROCESO FINALIZADO")
+    print("Tema utilizado:", tema)
     print("Formatos generados:", len(resumen["formatos_generados"]))
     print("Publicaciones programadas:", len(programacion["programadas"]))
     print("Publicaciones pendientes:", len(programacion["sin_programar"]))
     print("Total en calendario:", resumen["total_publicaciones_calendario"])
 
     return resumen
+
 
 if __name__ == "__main__":
     ejecutar_proceso()

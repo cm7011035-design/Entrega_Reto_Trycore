@@ -29,19 +29,61 @@ def contar_parrafos(texto):
 
 
 def extraer_cifras(texto):
-    """Identifica cifras y conserva el contexto para su revisión."""
+    """Identifica cifras relevantes y conserva su oración completa."""
 
-    patron = r"\b\d+(?:[.,]\d+)?\s*(?:%|años|meses|días|horas)?\b"
+    patron = (
+        r"(?<!\w)"
+        r"\d+(?:[.,]\d+)?"
+        r"\s*(?:%|por ciento|años|meses|días|horas|"
+        r"minutos|segundos|semanas|personas|empresas|"
+        r"usuarios|procesos|tareas|pesos|dólares)?"
+        r"(?!\w)"
+    )
 
     resultados = []
 
     for coincidencia in re.finditer(
-        patron, texto, flags=re.IGNORECASE
+        patron,
+        texto,
+        flags=re.IGNORECASE
     ):
         cifra = coincidencia.group().strip()
 
-        inicio = max(0, coincidencia.start() - 80)
-        fin = min(len(texto), coincidencia.end() + 80)
+        unidad = re.search(
+            r"(?:%|por ciento|años|meses|días|horas|"
+            r"minutos|segundos|semanas|personas|empresas|"
+            r"usuarios|procesos|tareas|pesos|dólares)$",
+            cifra,
+            flags=re.IGNORECASE
+        )
+
+        # Evita números aislados que suelen ser metadatos.
+        if not unidad:
+            continue
+
+        # Busca el inicio de la oración.
+        delimitadores = ".!?\n"
+
+        posiciones_inicio = [
+            texto.rfind(signo, 0, coincidencia.start())
+            for signo in delimitadores
+        ]
+
+        inicio = max(posiciones_inicio) + 1
+
+        # Busca el final de la oración.
+        siguiente_delimitador = re.search(
+            r"[.!?\n]",
+            texto[coincidencia.end():]
+        )
+
+        if siguiente_delimitador:
+            fin = (
+                coincidencia.end()
+                + siguiente_delimitador.end()
+            )
+        else:
+            fin = len(texto)
 
         contexto = texto[inicio:fin].strip()
 
@@ -52,6 +94,7 @@ def extraer_cifras(texto):
         })
 
     return resultados
+
 
 def detectar_temas(texto):
     """Identifica temas mediante palabras clave."""
@@ -124,6 +167,11 @@ def diagnosticar_contenido(texto):
             "No se identificaron cifras. No deben inventarse datos."
         )
 
+    if any(cifra.get("requiere_revision") for cifra in cifras):
+        alertas.append(
+            "Se identificaron cifras que requieren verificación de su fuente."
+        )
+
     if not temas:
         alertas.append(
             "No se identificaron temas mediante las palabras clave definidas."
@@ -151,4 +199,3 @@ def diagnosticar_contenido(texto):
         "temas": temas,
         "alertas": alertas,
     }
-

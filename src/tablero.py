@@ -10,9 +10,8 @@ from src.calendario import cargar_ventana
 
 
 def agrupar_publicaciones_por_fecha(calendario):
-    """
-    Agrupa las publicaciones por fecha y las ordena por hora.
-    """
+    """Agrupa las publicaciones por fecha y las ordena por hora."""
+
     publicaciones_por_fecha = {}
 
     publicaciones_ordenadas = sorted(
@@ -32,6 +31,7 @@ def agrupar_publicaciones_por_fecha(calendario):
         publicaciones_por_fecha[fecha].append(publicacion)
 
     return publicaciones_por_fecha
+
 
 def cargar_datos_tablero():
     """Carga el calendario y el resumen de la automatización."""
@@ -53,6 +53,54 @@ def cargar_datos_tablero():
     return calendario, resumen
 
 
+def generar_seccion_alertas(resumen):
+    """Muestra las alertas detectadas durante el diagnóstico."""
+
+    diagnostico = resumen.get("diagnostico", {})
+    alertas = diagnostico.get("alertas", [])
+    cifras = diagnostico.get("cifras", [])
+
+    cifras_revision = [
+        cifra for cifra in cifras
+        if cifra.get("requiere_revision")
+    ]
+
+    if not alertas and not cifras_revision:
+        return ""
+
+    elementos = ""
+
+    for alerta in alertas:
+        elementos += f"<li>{escape(str(alerta))}</li>"
+
+    for cifra in cifras_revision:
+        valor = escape(str(cifra.get("valor", "Sin valor")))
+        contexto = escape(
+            str(cifra.get("contexto", "Sin contexto"))
+        )
+
+        elementos += f"""
+        <li>
+            <strong>Cifra por verificar: {valor}</strong>
+            <p>{contexto}</p>
+        </li>
+        """
+
+    return f"""
+    <section>
+        <h2>Alertas del diagnóstico</h2>
+
+        <div class="aviso-humano">
+            <strong>Revisión de contenido necesaria</strong>
+
+            <ul>
+                {elementos}
+            </ul>
+        </div>
+    </section>
+    """
+
+
 def generar_tarjetas_puntuacion(resumen):
     """Genera tarjetas con puntuaciones históricas."""
 
@@ -65,23 +113,41 @@ def generar_tarjetas_puntuacion(resumen):
 
     for formato, datos in puntuaciones.items():
 
-        if datos is None:
-            puntuacion = "Sin datos"
-            evidencia = "Sin evidencia histórica"
-
+        if datos is None or datos.get("puntuacion") is None:
+            puntuacion = "Sin datos históricos"
+            evidencia = (
+                datos.get(
+                    "explicacion",
+                    "Sin evidencia histórica"
+                )
+                if datos else "Sin evidencia histórica"
+            )
+            fuente = ""
         else:
             puntuacion = f"{datos['puntuacion']:.2f}/100"
             evidencia = datos.get(
                 "nivel_evidencia",
                 "No definida"
             )
+            fuente = datos.get(
+                "fuente_puntuacion",
+                "No especificada"
+            )
 
         tarjetas += f"""
         <article class="tarjeta-puntuacion">
-            <h3>{escape(formato)}</h3>
-            <p class="puntuacion">{escape(puntuacion)}</p>
+            <h3>{escape(str(formato))}</h3>
+
+            <p class="puntuacion">
+                {escape(str(puntuacion))}
+            </p>
+
             <p class="evidencia">
                 Evidencia: {escape(str(evidencia))}
+            </p>
+
+            <p class="evidencia">
+                Base: {escape(str(fuente))}
             </p>
         </article>
         """
@@ -89,10 +155,17 @@ def generar_tarjetas_puntuacion(resumen):
     return tarjetas
 
 
-def generar_vista_dos_semanas(calendario):
-    """Genera una vista de los días de la ventana."""
+
+
+def generar_vista_dos_semanas(
+    calendario,
+    puntuaciones=None,
+    tema_puntuacion=None
+):
+    """Genera la vista de dos semanas con puntuaciones aplicables."""
 
     grupos = agrupar_publicaciones_por_fecha(calendario)
+    puntuaciones = puntuaciones or {}
 
     ventana = cargar_ventana()
 
@@ -131,7 +204,8 @@ def generar_vista_dos_semanas(calendario):
 
         for publicacion in publicaciones:
 
-            formato = publicacion["formato"]
+            formato = publicacion.get("formato", "")
+            tema = publicacion.get("tema", "")
 
             clase = clases.get(
                 formato,
@@ -142,23 +216,71 @@ def generar_vista_dos_semanas(calendario):
                 str(publicacion.get("titulo", "Sin título"))
             )
 
-            tema = escape(
-                str(publicacion.get("tema", "No definido"))
+            tema_html = escape(
+                str(tema or "No definido")
             )
 
             hora = escape(
                 str(publicacion.get("hora", "Sin hora"))
             )
 
+            es_tema_evaluado = (
+                tema_puntuacion is not None
+                and tema == tema_puntuacion
+            )
+
+            datos_puntuacion = (
+                puntuaciones.get(formato)
+                if es_tema_evaluado
+                else None
+            )
+
+            if (
+                datos_puntuacion
+                and datos_puntuacion.get("puntuacion") is not None
+            ):
+                valor = float(
+                    datos_puntuacion["puntuacion"]
+                )
+
+                puntuacion_html = (
+                    f"<p class='puntuacion-publicacion'>"
+                    f"Referencia histórica del formato: "
+                    f"{valor:.2f}/100"
+                    f"</p>"
+                )
+
+                fuente = datos_puntuacion.get(
+                    "fuente_puntuacion",
+                    "No especificada"
+                )
+
+                fuente_html = (
+                    f"<small>Base: {escape(str(fuente))}</small>"
+                )
+
+            else:
+                puntuacion_html = (
+                    "<p class='puntuacion-publicacion'>"
+                    "Sin puntuación individual disponible"
+                    "</p>"
+                )
+
+                fuente_html = ""
+
             tarjetas += f"""
             <article class="publicacion {clase}">
                 <strong class="hora">{hora}</strong>
 
-                <h4>{escape(formato)}</h4>
+                <h4>{escape(str(formato))}</h4>
 
                 <p>{titulo}</p>
 
-                <small>Tema: {tema}</small>
+                <small>Tema: {tema_html}</small>
+
+                {puntuacion_html}
+
+                {fuente_html}
 
                 <p class="revision">
                     Pendiente de revisión humana
@@ -199,8 +321,8 @@ def generar_filas_calendario(calendario):
     publicaciones_ordenadas = sorted(
         calendario,
         key=lambda elemento: (
-            elemento["fecha"],
-            elemento["hora"]
+            elemento.get("fecha", ""),
+            elemento.get("hora", "")
         )
     )
 
@@ -232,7 +354,7 @@ def generar_filas_calendario(calendario):
 
 
 def generar_seccion_pendientes(resumen):
-    """Muestra las publicaciones que no pudieron programarse."""
+    """Muestra rechazos de validación y publicaciones sin horario."""
 
     pendientes = resumen.get(
         "publicaciones_sin_programar",
@@ -244,16 +366,17 @@ def generar_seccion_pendientes(resumen):
         <section>
             <h2>Publicaciones pendientes y conflictos</h2>
 
-            <p>No hay publicaciones pendientes de programación.</p>
-
             <p>
-                Los conflictos deben verificarse mediante
-                las reglas del calendario.
+                No hay publicaciones rechazadas ni pendientes
+                de programación.
             </p>
         </section>
         """
 
     filas = ""
+
+    rechazadas = 0
+    sin_horario = 0
 
     for publicacion in pendientes:
 
@@ -269,6 +392,17 @@ def generar_seccion_pendientes(resumen):
             str(publicacion.get("tema", "No definido"))
         )
 
+        estado = publicacion.get("estado", "")
+
+        if estado == "rechazada_por_validacion":
+            tipo = "Rechazada por validación"
+            rechazadas += 1
+        else:
+            tipo = "Sin horario disponible"
+            sin_horario += 1
+
+        tipo = escape(tipo)
+
         motivo = escape(
             str(publicacion.get("motivo", "Requiere revisión"))
         )
@@ -278,6 +412,7 @@ def generar_seccion_pendientes(resumen):
             <td>{titulo}</td>
             <td>{formato}</td>
             <td>{tema}</td>
+            <td>{tipo}</td>
             <td>{motivo}</td>
         </tr>
         """
@@ -287,8 +422,11 @@ def generar_seccion_pendientes(resumen):
         <h2>Publicaciones pendientes y conflictos</h2>
 
         <p>
-            Estas publicaciones no encontraron un horario
-            disponible según las reglas actuales.
+            Rechazadas por validación: <strong>{rechazadas}</strong>
+        </p>
+
+        <p>
+            Sin horario disponible: <strong>{sin_horario}</strong>
         </p>
 
         <div class="tabla-contenedor">
@@ -298,6 +436,7 @@ def generar_seccion_pendientes(resumen):
                         <th>Título</th>
                         <th>Formato</th>
                         <th>Tema</th>
+                        <th>Tipo de incidencia</th>
                         <th>Motivo</th>
                     </tr>
                 </thead>
@@ -318,11 +457,17 @@ def generar_tablero():
 
     seccion_pendientes = generar_seccion_pendientes(resumen)
 
+    seccion_alertas = generar_seccion_alertas(resumen)
+
     tarjetas = generar_tarjetas_puntuacion(resumen)
 
     filas = generar_filas_calendario(calendario)
 
-    vista_calendario = generar_vista_dos_semanas(calendario)
+    vista_calendario = generar_vista_dos_semanas(
+    calendario,
+    resumen.get("puntuaciones", {}),
+    resumen.get("tema_detectado")
+)
 
     historial = resumen.get("analisis_historico", {})
 
@@ -505,6 +650,17 @@ def generar_tablero():
             .hora {{
                 color: #174a7e;
                 font-size: 13px;
+            }}
+
+            .puntuacion-publicacion {{
+                color: #174a7e;
+                font-weight: bold;
+                font-size: 13px;
+                margin-bottom: 5px;
+            }}
+
+            .publicacion small {{
+                color: #64748b;
             }}
 
             .formato-post {{
@@ -692,6 +848,8 @@ def generar_tablero():
 
             </section>
 
+            {seccion_alertas}
+
             {seccion_pendientes}
 
             <section>
@@ -791,7 +949,6 @@ def guardar_tablero():
 
     contenido = generar_tablero()
 
-    # Eliminar espacios innecesarios al final de cada línea.
     contenido = "\n".join(
         linea.rstrip()
         for linea in contenido.splitlines()

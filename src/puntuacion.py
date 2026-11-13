@@ -122,7 +122,7 @@ def obtener_referencias(medianas):
 
 
 def comparar_rendimiento(medianas, formato, tema):
-    """Compara un formato y un tema frente a su historial."""
+    """Compara el formato y el tema con el historial disponible."""
 
     datos_formato = medianas["formatos"].get(formato)
     datos_tema = medianas["temas"].get(tema)
@@ -131,45 +131,64 @@ def comparar_rendimiento(medianas, formato, tema):
         return None, "No existe historial para este formato."
 
     if datos_tema is None:
-        return None, "No existe historial para este tema."
+        return {
+            "formato": datos_formato,
+            "tema": None,
+        }, (
+            "No existe historial para este tema. "
+            "Se utilizará únicamente el historial del formato."
+        )
 
     return {
         "formato": datos_formato,
         "tema": datos_tema,
     }, "Comparación histórica disponible."
 
-
 def calcular_puntuaciones_metricas(datos, referencias):
-    """Calcula las puntuaciones históricas de cada métrica."""
+    """
+    Calcula las puntuaciones históricas de cada métrica.
+
+    Si existe historial del tema, combina formato y tema
+    en partes iguales. Si no existe, utiliza solo el formato.
+    """
 
     puntuaciones = {}
 
     for metrica in PESOS_METRICAS:
         valor_formato = datos["formato"].get(metrica)
-        valor_tema = datos["tema"].get(metrica)
-
         referencia_formato = referencias["formatos"].get(metrica)
-        referencia_tema = referencias["temas"].get(metrica)
 
         puntuacion_formato = normalizar_puntuacion(
             valor_formato,
             referencia_formato,
         )
 
+        datos_tema = datos.get("tema")
+
+        if datos_tema is None:
+            puntuaciones[metrica] = puntuacion_formato
+            continue
+
+        valor_tema = datos_tema.get(metrica)
+        referencia_tema = referencias["temas"].get(metrica)
+
         puntuacion_tema = normalizar_puntuacion(
             valor_tema,
             referencia_tema,
         )
 
-        if puntuacion_formato is None or puntuacion_tema is None:
-            puntuaciones[metrica] = None
-            continue
+        if puntuacion_formato is None:
+            puntuaciones[metrica] = puntuacion_tema
 
-        puntuaciones[metrica] = round(
-            (puntuacion_formato * 0.5)
-            + (puntuacion_tema * 0.5),
-            2,
-        )
+        elif puntuacion_tema is None:
+            puntuaciones[metrica] = puntuacion_formato
+
+        else:
+            puntuaciones[metrica] = round(
+                (puntuacion_formato * 0.5)
+                + (puntuacion_tema * 0.5),
+                2,
+            )
 
     return puntuaciones
 
@@ -191,10 +210,15 @@ def calcular_puntuacion_final(puntuaciones):
     return round(resultado, 2)
 
 
-def clasificar_evidencia(cantidad_formato, cantidad_tema):
-    """Clasifica la cantidad de publicaciones disponibles."""
+def clasificar_evidencia(cantidad_formato, cantidad_tema=None):
+    """
+    Clasifica la cantidad de publicaciones históricas disponibles.
+    """
 
-    cantidad = min(cantidad_formato, cantidad_tema)
+    if cantidad_tema is None:
+        cantidad = cantidad_formato
+    else:
+        cantidad = min(cantidad_formato, cantidad_tema)
 
     if cantidad >= 15:
         return "sólida"
@@ -273,9 +297,11 @@ def calificar_publicacion(formato, tema):
         )
     )
 
+    usa_solo_formato = comparacion["tema"] is None
+
     evidencia = clasificar_evidencia(
         cantidad_formato,
-        cantidad_tema,
+        None if usa_solo_formato else cantidad_tema,
     )
 
     if puntuacion_final is None:
@@ -285,8 +311,25 @@ def calificar_publicacion(formato, tema):
             "puntuacion": None,
             "puntuaciones_metricas": puntuaciones,
             "estado": "sin datos suficientes",
-            "explicacion": "No fue posible calcular todas las métricas.",
+            "explicacion": (
+                "No fue posible calcular todas las métricas "
+                "con los datos históricos disponibles."
+            ),
         }
+
+    if usa_solo_formato:
+        fuente = "solo formato"
+        explicacion = (
+            "Puntuación relativa basada únicamente en las "
+            "medianas históricas del formato. No existe "
+            "historial suficiente del tema para compararlo."
+        )
+    else:
+        fuente = "formato y tema"
+        explicacion = (
+            "Puntuación relativa basada en las medianas "
+            "históricas del formato y del tema."
+        )
 
     return {
         "formato": formato,
@@ -296,9 +339,7 @@ def calificar_publicacion(formato, tema):
         "publicaciones_formato": cantidad_formato,
         "publicaciones_tema": cantidad_tema,
         "nivel_evidencia": evidencia,
+        "fuente_puntuacion": fuente,
         "estado": "calculado",
-        "explicacion": (
-            "Puntuación relativa basada en las medianas históricas "
-            "del formato y del tema."
-        ),
+        "explicacion": explicacion,
     }

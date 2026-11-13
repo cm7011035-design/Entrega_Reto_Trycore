@@ -1,308 +1,224 @@
+# Automatización de Mercadeo - Trycore
 
-
-\# Automatización de Mercadeo - Trycore
-
-
-
-\## 1. Descripción del proyecto
-
-
+## 1. Descripción del proyecto
 
 Este proyecto desarrolla una solución en Python para automatizar parte del proceso de mercadeo de Trycore.
 
+La herramienta recibe una pieza de contenido desde una fuente web o un archivo de respaldo, analiza su estructura, identifica temas relevantes y genera propuestas de publicaciones para diferentes formatos.
 
+También analiza el historial de publicaciones para calcular indicadores de rendimiento y utiliza las reglas de un calendario para programar nuevas publicaciones.
 
-La herramienta recibe una pieza de contenido, analiza su estructura, identifica temas relevantes y genera propuestas de publicaciones para diferentes formatos.
+El proceso mantiene la revisión humana como requisito obligatorio antes de aprobar o publicar cualquier contenido.
 
+## 2. Objetivos
 
+- Leer una pieza madre desde una fuente web.
+- Analizar el contenido e identificar sus temas principales.
+- Generar publicaciones para LinkedIn y carruseles.
+- Validar los contenidos según las reglas de configuración.
+- Analizar y normalizar el historial de publicaciones.
+- Detectar registros duplicados, anomalías y valores extremos.
+- Calcular puntuaciones de referencia basadas en resultados históricos.
+- Programar publicaciones respetando las restricciones del calendario.
+- Generar un tablero visual de seguimiento.
+- Ejecutar pruebas automatizadas para verificar las reglas principales.
 
-También analiza el historial de publicaciones para calcular indicadores de rendimiento y utiliza las reglas de un calendario para programar las nuevas publicaciones.
+## 3. Tecnologías utilizadas
 
+- Python.
+- HTML.
+- CSS.
+- JSON.
+- CSV.
+- Git y GitHub.
+- `unittest` para pruebas automatizadas.
+- Biblioteca estándar de Python para el procesamiento de datos y la lectura de fuentes web.
 
-
-El proceso mantiene la revisión humana como requisito antes de aprobar o publicar cualquier contenido.
-
-
-
-\## 2. Objetivos
-
-
-
-\- Leer una pieza madre desde una fuente web.
-
-\- Analizar el contenido y detectar sus temas principales.
-
-\- Generar publicaciones para LinkedIn y carruseles.
-
-\- Validar los contenidos según las reglas de configuración.
-
-\- Analizar el historial de publicaciones.
-
-\- Calcular puntuaciones basadas en resultados históricos.
-
-\- Programar publicaciones respetando las restricciones del calendario.
-
-\- Generar un tablero visual de seguimiento.
-
-\- Ejecutar pruebas automatizadas para verificar las reglas principales.
-
-
-
-\## 3. Tecnologías utilizadas
-
-
-
-\- Python.
-
-\- HTML.
-
-\- CSS.
-
-\- JSON.
-
-\- CSV.
-
-\- Git y GitHub.
-
-\- unittest para pruebas automatizadas.
-
-
-
-\## 4. Estructura del proyecto
-
-
+## 4. Estructura del proyecto
 
 ```text
-
-Reto\_Aprendiz\_Mercadeo\_Trycore/
-
+Reto_Aprendiz_Mercadeo_Trycore/
 │
-
-├── 02\_insumos/
-
+├── 02_insumos/
 │   ├── calendario/
-
 │   ├── configuracion/
-
 │   ├── historial/
-
-│   └── pieza\_madre/
-
+│   └── pieza_madre/
 │
-
 ├── src/
-
 │   ├── configuracion.py
-
-│   ├── lector\_fuente.py
-
-│   ├── estructura\_contenido.py
-
+│   ├── lector_fuente.py
+│   ├── estructura_contenido.py
 │   ├── diagnostico.py
-
 │   ├── transformacion.py
-
 │   ├── validador.py
-
-│   ├── validador\_formatos.py
-
+│   ├── validador_formatos.py
 │   ├── historial.py
-
 │   ├── puntuacion.py
-
 │   ├── calendario.py
-
 │   └── tablero.py
-
 │
-
 ├── tests/
-
-│   ├── test\_calendario.py
-
-│   ├── test\_diagnostico.py
-
-│   ├── test\_historial.py
-
-│   ├── test\_puntuacion.py
-
-│   └── test\_tablero.py
-
+│   ├── test_calendario.py
+│   ├── test_diagnostico.py
+│   ├── test_ejecutar.py
+│   ├── test_historial.py
+│   ├── test_puntuacion.py
+│   ├── test_tablero.py
+│   └── test_transformacion.py
 │
-
 ├── salidas/
-
+│   ├── calendario.csv
 │   ├── resumen.json
-
-│   ├── calendario\_prueba.csv
-
 │   └── tablero.html
-
 │
-
 ├── ejecutar.py
-
 ├── README.md
-
+├── requirements.txt
 └── .gitignore
-
 ```
 
-
-
-\## 5. Funcionamiento general
-
-
+## 5. Funcionamiento general
 
 El sistema ejecuta las siguientes etapas:
 
+1. Carga la configuración y los insumos del proyecto.
+2. Lee el contenido de la pieza madre desde una URL.
+3. Utiliza un archivo de respaldo si no es posible acceder a la fuente web.
+4. Extrae la estructura y el texto del contenido.
+5. Realiza un diagnóstico mediante indicadores medibles.
+6. Identifica información relevante para la transformación.
+7. Genera un post de LinkedIn y un carrusel.
+8. Valida los formatos generados.
+9. Analiza y normaliza el historial de publicaciones.
+10. Calcula puntuaciones de referencia según los datos históricos disponibles.
+11. Programa las publicaciones respetando las restricciones del calendario.
+12. Genera los archivos de resultados y el tablero HTML.
 
+## 6. Requisitos e instalación
 
-1\. Carga la configuración y los insumos entregados.
+Se requiere:
 
-2\. Lee el contenido de la pieza madre.
+- Python 3.10 o superior.
+- Git (opcional, para control de versiones).
 
-3\. Extrae su estructura y texto.
+El proyecto utiliza módulos de la biblioteca estándar de Python, por lo que no requiere instalar dependencias externas adicionales.
 
-4\. Realiza un diagnóstico del contenido.
+### Crear y activar el entorno virtual
 
-5\. Selecciona información relevante.
-
-6\. Genera un post de LinkedIn y un carrusel.
-
-7\. Valida los formatos generados.
-
-8\. Analiza el historial de publicaciones.
-
-9\. Calcula puntuaciones de referencia.
-
-10\. Programa las publicaciones según las reglas del calendario.
-
-11\. Genera los archivos de resultados y el tablero HTML.
-
-
-
-\## 6. Ejecución del proyecto
-
-
-
-Se requiere Python instalado.
-
-
-
-Desde la carpeta principal del proyecto, activar el entorno virtual:
-
-
+Desde la carpeta principal del proyecto:
 
 ```cmd
-
-.venv\\Scripts\\activate
-
+python -m venv .venv
 ```
 
-
-
-Instalar las dependencias registradas en el proyecto:
-
-
+Activar el entorno virtual:
 
 ```cmd
+.venv\Scripts\activate
+```
 
+### Instalar dependencias
+
+El archivo `requirements.txt` se conserva para facilitar la gestión de dependencias futuras. Actualmente no se requieren paquetes externos.
+
+```cmd
 python -m pip install -r requirements.txt
-
 ```
 
+## 7. Ejecución del proyecto
 
-
-Ejecutar la automatización:
-
-
+Desde la carpeta principal, ejecutar:
 
 ```cmd
-
 python ejecutar.py
-
 ```
 
+El proceso realiza la automatización completa y genera los resultados en la carpeta `salidas`.
 
+Los resultados principales son:
 
-El proceso genera los resultados en la carpeta `salidas`.
+- `calendario.csv`
+- `resumen.json`
+- `tablero.html`
 
-
-
-\## 7. Ejecución de pruebas
-
-
-
-Para ejecutar todas las pruebas automatizadas:
-
-
+Para visualizar el tablero en Windows:
 
 ```cmd
-
-python -m unittest discover -s tests -v
-
+start salidas\tablero.html
 ```
 
+## 8. Ejecución de pruebas automatizadas
 
+El proyecto cuenta con 50 pruebas automatizadas para verificar los módulos y las reglas principales.
 
-Actualmente, el proyecto cuenta con 32 pruebas automatizadas aprobadas.
+Para ejecutar todas las pruebas:
 
+```cmd
+python -m unittest discover -s tests -v
+```
 
+Las pruebas cubren:
 
-\## 8. Resultados generados
+- Reglas y restricciones del calendario.
+- Diagnóstico del contenido.
+- Lectura de fuentes y manejo de respaldos.
+- Análisis y normalización del historial.
+- Cálculo de puntuaciones.
+- Generación del tablero.
+- Transformación y validación de contenidos.
 
+## 9. Resultados generados
 
+Los archivos se almacenan en la carpeta `salidas`.
 
-\- `resumen.json`: contiene el diagnóstico, formatos generados, validaciones, puntuaciones y resultados de programación.
+| Archivo | Descripción |
+|---|---|
+| `calendario.csv` | Contiene las publicaciones programadas y sus datos de calendario. |
+| `resumen.json` | Contiene el diagnóstico, los formatos generados, las validaciones, las puntuaciones y los resultados de programación. |
+| `tablero.html` | Panel visual con indicadores históricos, alertas, publicaciones pendientes y calendario de dos semanas. |
 
-\- `calendario.csv`: contiene el calendario de publicaciones generado por el proceso.
-
-\- `tablero.html`: tablero visual con las publicaciones, fechas, formatos y puntuaciones históricas.
-
-
-
-Los archivos se generan en la carpeta `salidas`.
-
-\## 9. Revisión humana
-
-
+## 10. Revisión humana obligatoria
 
 Los contenidos generados son propuestas que deben ser revisadas por una persona antes de su aprobación y publicación.
 
-
-
 El sistema no realiza publicaciones automáticas en LinkedIn ni utiliza credenciales de redes sociales.
 
+La programación en el calendario no significa que una publicación haya sido aprobada o publicada.
 
+Las cifras identificadas durante el diagnóstico pueden requerir verificación de sus fuentes.
 
-Las puntuaciones son indicadores comparativos basados en datos históricos. No representan probabilidades ni garantizan resultados futuros.
+## 11. Método de puntuación y limitaciones
 
+Las puntuaciones se calculan utilizando estadísticas del historial de publicaciones, considerando las métricas disponibles:
 
+- Impresiones.
+- Reacciones.
+- Clics.
 
-\## 10. Consideraciones y limitaciones
+El algoritmo utiliza medianas históricas para reducir el efecto de valores extremos y aplica ponderaciones para combinar las métricas.
 
+Cuando existe información del formato y del tema, se consideran ambas referencias. Cuando no existe historial específico del tema, se utiliza únicamente el historial del formato.
 
+La cantidad de datos disponibles se utiliza para clasificar el nivel de evidencia.
 
-\- Los formatos implementados actualmente son el post de LinkedIn y el carrusel.
+Las puntuaciones son indicadores relativos de comparación histórica. No representan probabilidades de éxito, predicciones ni garantías de rendimiento futuro.
 
-\- La calidad del contenido generado requiere revisión humana.
+Cuando no existe información suficiente, el sistema debe indicar que no dispone de una puntuación individual válida.
 
-\- La puntuación depende de la información disponible en el historial.
+## 12. Consideraciones y limitaciones
 
-\- Los temas utilizados para comparar resultados deben contar con datos históricos suficientes.
+- Los formatos implementados actualmente son el post de LinkedIn y el carrusel.
+- La calidad del contenido generado requiere revisión humana.
+- La puntuación depende de la disponibilidad y calidad del historial.
+- Los temas sin registros históricos suficientes no pueden recibir una comparación temática confiable.
+- Las cifras extraídas de la pieza madre deben verificarse antes de su utilización.
+- El tablero presenta el calendario y los resultados del proceso; no reemplaza la aprobación humana.
+- La generación de contenido no incluye diseño gráfico ni publicación directa en redes sociales.
+- El sistema genera archivos locales y no publica contenido en plataformas externas.
 
-\- El tablero presenta el calendario y los resultados del proceso; no reemplaza la aprobación humana.
-
-\- La generación de contenido no incluye diseño gráfico ni publicación directa en redes sociales.
-
-
-
-\## 11. Control de versiones
-
-
+## 13. Control de versiones
 
 El proyecto utiliza Git para registrar los avances y cambios realizados durante el desarrollo.
 
-
-
+El historial de commits permite identificar la evolución de la estructura, el diagnóstico, el análisis histórico, el algoritmo de puntuación, el calendario, las pruebas y el tablero visual.

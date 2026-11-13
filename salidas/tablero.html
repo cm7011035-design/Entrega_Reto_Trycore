@@ -176,6 +176,17 @@
                 font-size: 13px;
             }
 
+            .puntuacion-publicacion {
+                color: #174a7e;
+                font-weight: bold;
+                font-size: 13px;
+                margin-bottom: 5px;
+            }
+
+            .publicacion small {
+                color: #64748b;
+            }
+
             .formato-post {
                 border-left-color: #2563eb;
             }
@@ -353,17 +364,33 @@
 
         <article class="tarjeta-puntuacion">
             <h3>post_linkedin</h3>
-            <p class="puntuacion">61.87/100</p>
+
+            <p class="puntuacion">
+                48.81/100
+            </p>
+
             <p class="evidencia">
-                Evidencia: moderada
+                Evidencia: sólida
+            </p>
+
+            <p class="evidencia">
+                Base: solo formato
             </p>
         </article>
 
         <article class="tarjeta-puntuacion">
             <h3>carrusel_linkedin</h3>
-            <p class="puntuacion">87.46/100</p>
+
+            <p class="puntuacion">
+                100.00/100
+            </p>
+
             <p class="evidencia">
-                Evidencia: moderada
+                Evidencia: sólida
+            </p>
+
+            <p class="evidencia">
+                Base: solo formato
             </p>
         </article>
 
@@ -378,14 +405,31 @@
             </section>
 
 
+    <section>
+        <h2>Alertas del diagnóstico</h2>
+
+        <div class="aviso-humano">
+            <strong>Revisión de contenido necesaria</strong>
+
+            <ul>
+                <li>Se identificaron cifras que requieren verificación de su fuente.</li>
+        <li>
+            <strong>Cifra por verificar: 100%</strong>
+            <p>La precisión del robot de RPA es del 100%.</p>
+        </li>
+
+            </ul>
+        </div>
+    </section>
+
+
+
         <section>
             <h2>Publicaciones pendientes y conflictos</h2>
 
-            <p>No hay publicaciones pendientes de programación.</p>
-
             <p>
-                Los conflictos deben verificarse mediante
-                las reglas del calendario.
+                No hay publicaciones rechazadas ni pendientes
+                de programación.
             </p>
         </section>
 
@@ -442,9 +486,23 @@
 
             <div class="publicaciones-dia">
 
-            <p class="dia-vacio">
-                Sin publicaciones programadas
-            </p>
+            <article class="publicacion formato-post">
+                <strong class="hora">08:30</strong>
+
+                <h4>post_linkedin</h4>
+
+                <p>Todo lo que debes saber sobre este tipo de automatización robótica de tareas.</p>
+
+                <small>Tema: automatizacion</small>
+
+                <p class='puntuacion-publicacion'>Referencia histórica del formato: 48.81/100</p>
+
+                <small>Base: solo formato</small>
+
+                <p class="revision">
+                    Pendiente de revisión humana
+                </p>
+            </article>
 
             </div>
         </div>
@@ -466,6 +524,10 @@
 
                 <small>Tema: rpa</small>
 
+                <p class='puntuacion-publicacion'>Sin puntuación individual disponible</p>
+
+
+
                 <p class="revision">
                     Pendiente de revisión humana
                 </p>
@@ -482,9 +544,23 @@
 
             <div class="publicaciones-dia">
 
-            <p class="dia-vacio">
-                Sin publicaciones programadas
-            </p>
+            <article class="publicacion formato-carrusel">
+                <strong class="hora">08:30</strong>
+
+                <h4>carrusel_linkedin</h4>
+
+                <p>Todo lo que debes saber sobre este tipo de automatización robótica de tareas.</p>
+
+                <small>Tema: automatizacion</small>
+
+                <p class='puntuacion-publicacion'>Referencia histórica del formato: 100.00/100</p>
+
+                <small>Base: solo formato</small>
+
+                <p class="revision">
+                    Pendiente de revisión humana
+                </p>
+            </article>
 
             </div>
         </div>
@@ -497,20 +573,6 @@
 
             <div class="publicaciones-dia">
 
-            <article class="publicacion formato-post">
-                <strong class="hora">08:30</strong>
-
-                <h4>post_linkedin</h4>
-
-                <p>Post: ¿Tu empresa está preparada para implementar RPA? Estas prácticas pueden ayudarte a dar el primer paso.</p>
-
-                <small>Tema: rpa</small>
-
-                <p class="revision">
-                    Pendiente de revisión humana
-                </p>
-            </article>
-
             <article class="publicacion formato-carrusel">
                 <strong class="hora">11:00</strong>
 
@@ -519,6 +581,10 @@
                 <p>Cómo se lee un documento difícil</p>
 
                 <small>Tema: docfly</small>
+
+                <p class='puntuacion-publicacion'>Sin puntuación individual disponible</p>
+
+
 
                 <p class="revision">
                     Pendiente de revisión humana
@@ -581,20 +647,6 @@
 
             <div class="publicaciones-dia">
 
-            <article class="publicacion formato-carrusel">
-                <strong class="hora">08:30</strong>
-
-                <h4>carrusel_linkedin</h4>
-
-                <p>Carrusel: Todo lo que debes saber sobre este tipo de automatización robótica de tareas.</p>
-
-                <small>Tema: rpa</small>
-
-                <p class="revision">
-                    Pendiente de revisión humana
-                </p>
-            </article>
-
             <article class="publicacion formato-post">
                 <strong class="hora">11:00</strong>
 
@@ -603,6 +655,10 @@
                 <p>Perfiles TI que más se piden este trimestre</p>
 
                 <small>Tema: people_service</small>
+
+                <p class='puntuacion-publicacion'>Sin puntuación individual disponible</p>
+
+
 
                 <p class="revision">
                     Pendiente de revisión humana
@@ -659,6 +715,10 @@
 
                 <small>Tema: marca</small>
 
+                <p class='puntuacion-publicacion'>Sin puntuación individual disponible</p>
+
+
+
                 <p class="revision">
                     Pendiente de revisión humana
                 </p>
@@ -709,6 +769,18 @@
                         <tbody>
 
         <tr>
+            <td>2026-11-30</td>
+            <td>08:30</td>
+            <td>linkedin</td>
+            <td>post_linkedin</td>
+            <td>automatizacion</td>
+            <td>Todo lo que debes saber sobre este tipo de automatización robótica de tareas.</td>
+            <td>
+                <span class="estado">programada</span>
+            </td>
+        </tr>
+
+        <tr>
             <td>2026-12-01</td>
             <td>08:30</td>
             <td>linkedin</td>
@@ -721,12 +793,12 @@
         </tr>
 
         <tr>
-            <td>2026-12-03</td>
+            <td>2026-12-02</td>
             <td>08:30</td>
             <td>linkedin</td>
-            <td>post_linkedin</td>
-            <td>rpa</td>
-            <td>Post: ¿Tu empresa está preparada para implementar RPA? Estas prácticas pueden ayudarte a dar el primer paso.</td>
+            <td>carrusel_linkedin</td>
+            <td>automatizacion</td>
+            <td>Todo lo que debes saber sobre este tipo de automatización robótica de tareas.</td>
             <td>
                 <span class="estado">programada</span>
             </td>
@@ -739,18 +811,6 @@
             <td>carrusel_linkedin</td>
             <td>docfly</td>
             <td>Cómo se lee un documento difícil</td>
-            <td>
-                <span class="estado">programada</span>
-            </td>
-        </tr>
-
-        <tr>
-            <td>2026-12-07</td>
-            <td>08:30</td>
-            <td>linkedin</td>
-            <td>carrusel_linkedin</td>
-            <td>rpa</td>
-            <td>Carrusel: Todo lo que debes saber sobre este tipo de automatización robótica de tareas.</td>
             <td>
                 <span class="estado">programada</span>
             </td>
