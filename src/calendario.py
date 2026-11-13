@@ -1,3 +1,4 @@
+
 import csv
 import json
 
@@ -24,6 +25,7 @@ RUTA_CALENDARIO_OCUPADO = (
     / "calendario"
     / "calendario_ocupado.csv"
 )
+
 
 def cargar_ventana():
     """
@@ -55,6 +57,7 @@ def cargar_ventana():
         "fin": fin,
     }
 
+
 def cargar_calendario_ocupado():
     """
     Lee las publicaciones que ya están programadas.
@@ -73,6 +76,7 @@ def cargar_calendario_ocupado():
     ) as archivo:
         lector = csv.DictReader(archivo)
         publicaciones = list(lector)
+        campos = lector.fieldnames or []
 
     campos_obligatorios = {
         "fecha",
@@ -84,14 +88,13 @@ def cargar_calendario_ocupado():
         "estado",
     }
 
-    if not campos_obligatorios.issubset(
-        lector.fieldnames or []
-    ):
+    if not campos_obligatorios.issubset(campos):
         raise ValueError(
             "El calendario ocupado no contiene todas las columnas necesarias."
         )
 
     return publicaciones
+
 
 def cargar_reglas_calendario():
     """
@@ -102,16 +105,16 @@ def cargar_reglas_calendario():
 
     reglas = configuracion.get("calendario")
 
+    if not isinstance(reglas, dict):
+        raise ValueError(
+            "No se encontraron las reglas del calendario."
+        )
+
     reglas["limites_por_formato"] = {
         formato["id"]: formato["max_por_semana"]
         for formato in configuracion.get("matriz_formatos", [])
         if "id" in formato and "max_por_semana" in formato
     }
-
-    if not isinstance(reglas, dict):
-        raise ValueError(
-            "No se encontraron las reglas del calendario."
-        )
 
     campos_obligatorios = [
         "zona_horaria",
@@ -131,6 +134,7 @@ def cargar_reglas_calendario():
 
     return reglas
 
+
 def cargar_festivos(reglas):
     """
     Convierte los festivos configurados en fechas de Python.
@@ -143,6 +147,7 @@ def cargar_festivos(reglas):
         festivos.add(fecha)
 
     return festivos
+
 
 def es_dia_habil(fecha, reglas, festivos):
     """
@@ -169,6 +174,7 @@ def es_dia_habil(fecha, reglas, festivos):
 
     return True
 
+
 def contar_publicaciones_por_dia(publicaciones, fecha):
     """
     Cuenta las publicaciones existentes en una fecha.
@@ -180,6 +186,7 @@ def contar_publicaciones_por_dia(publicaciones, fecha):
         if publicacion["fecha"] == fecha
         and publicacion["estado"].lower() == "programada"
     )
+
 
 def contar_publicaciones_por_semana(publicaciones, fecha):
     """
@@ -199,6 +206,7 @@ def contar_publicaciones_por_semana(publicaciones, fecha):
         if inicio_semana <= publicacion["fecha"] <= fin_semana
         and publicacion["estado"].lower() == "programada"
     )
+
 
 def contar_publicaciones_por_formato_semana(
     publicaciones,
@@ -224,6 +232,7 @@ def contar_publicaciones_por_formato_semana(
         and publicacion["formato"] == formato
     )
 
+
 def horario_ocupado(publicaciones, fecha, hora):
     """
     Comprueba si una fecha y hora ya están ocupadas.
@@ -238,6 +247,7 @@ def horario_ocupado(publicaciones, fecha, hora):
             return True
 
     return False
+
 
 def tema_respetar_separacion(
     publicaciones,
@@ -274,6 +284,7 @@ def tema_respetar_separacion(
             return False
 
     return True
+
 
 def validar_horario(
     fecha,
@@ -317,6 +328,7 @@ def validar_horario(
 
     return True
 
+
 def generar_horarios_disponibles(
     ventana,
     publicaciones,
@@ -358,17 +370,21 @@ def generar_horarios_disponibles(
 
     return horarios_disponibles
 
+
 def programar_publicacion(
     publicacion,
     publicaciones,
     ventana,
-    reglas
+    reglas,
+    limite_formato=None
 ):
     """
-    Asigna el primer horario válido a una publicación.
+    Asigna el primer horario válido que respete
+    también el límite semanal del formato.
     """
 
     tema = publicacion["tema"]
+    formato = publicacion["formato"]
 
     horarios = generar_horarios_disponibles(
         ventana,
@@ -377,16 +393,31 @@ def programar_publicacion(
         tema
     )
 
-    if not horarios:
-        return None
+    horario_elegido = None
 
-    horario_elegido = horarios[0]
+    for horario in horarios:
+
+        if limite_formato is not None:
+            cantidad_formato = contar_publicaciones_por_formato_semana(
+                publicaciones,
+                horario["fecha"],
+                formato
+            )
+
+            if cantidad_formato >= limite_formato:
+                continue
+
+        horario_elegido = horario
+        break
+
+    if horario_elegido is None:
+        return None
 
     nueva_publicacion = {
         "fecha": horario_elegido["fecha"],
         "hora": horario_elegido["hora"],
         "canal": publicacion["canal"],
-        "formato": publicacion["formato"],
+        "formato": formato,
         "tema": tema,
         "titulo": publicacion["titulo"],
         "estado": "programada",
@@ -395,6 +426,7 @@ def programar_publicacion(
     publicaciones.append(nueva_publicacion)
 
     return nueva_publicacion
+
 
 def guardar_calendario(publicaciones, ruta_salida):
     """
@@ -435,6 +467,7 @@ def guardar_calendario(publicaciones, ruta_salida):
 
             escritor.writerow(registro)
 
+
 def programar_publicaciones(
     publicaciones_nuevas,
     publicaciones_ocupadas,
@@ -467,41 +500,24 @@ def programar_publicaciones(
             publicacion,
             calendario_prueba,
             ventana,
-            reglas
+            reglas,
+            limite_formato
         )
 
         if resultado is None:
             publicacion_pendiente = publicacion.copy()
             publicacion_pendiente["motivo"] = (
-                "No se encontró un horario disponible."
-            )
+    "No se encontró un horario disponible que respete "
+    "el límite semanal del formato y los demás límites "
+    "del calendario."
+)
+
             publicaciones_sin_programar.append(
                 publicacion_pendiente
             )
             continue
 
-        fecha_propuesta = resultado["fecha"]
-
-        cantidad_formato = contar_publicaciones_por_formato_semana(
-            calendario,
-            fecha_propuesta,
-            formato
-        )
-
-        if (
-            limite_formato is not None
-            and cantidad_formato >= limite_formato
-        ):
-            publicacion_pendiente = publicacion.copy()
-            publicacion_pendiente["motivo"] = (
-                f"Se alcanzó el límite semanal de "
-                f"{limite_formato} publicaciones para {formato}."
-            )
-            publicaciones_sin_programar.append(
-                publicacion_pendiente
-            )
-            continue
-
+        # La publicación ya fue agregada a calendario_prueba.
         calendario = calendario_prueba
         publicaciones_programadas.append(resultado)
 
@@ -510,6 +526,8 @@ def programar_publicaciones(
         "programadas": publicaciones_programadas,
         "sin_programar": publicaciones_sin_programar,
     }
+
+
 def normalizar_publicaciones_ocupadas(publicaciones):
     """
     Convierte las fechas y horas ocupadas a formatos comparables.

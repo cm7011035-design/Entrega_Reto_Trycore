@@ -155,6 +155,41 @@ class PruebasCalendario(unittest.TestCase):
             resultado["sin_programar"][0]["motivo"]
         )
 
+    def test_10_buscar_segunda_semana_si_formato_ya_alcanzo_limite(self):
+        ocupadas = [
+            {
+                "fecha": date(2026, 11, 30),
+                "hora": time(8, 30),
+                "canal": "newsletter",
+                "formato": "newsletter",
+                "tema": "otro_tema",
+                "titulo": "Newsletter ya programado",
+                "estado": "programada",
+            }
+        ]
+
+        nueva = [
+            {
+                "canal": "newsletter",
+                "formato": "newsletter",
+                "tema": "tema_nuevo",
+                "titulo": "Newsletter de la segunda semana",
+            }
+        ]
+
+        resultado = programar_publicaciones(
+            nueva,
+            ocupadas,
+            self.ventana,
+            self.reglas,
+        )
+
+        self.assertEqual(len(resultado["programadas"]), 1)
+        self.assertEqual(len(resultado["sin_programar"]), 0)
+        self.assertEqual(
+            resultado["programadas"][0]["fecha"],
+            date(2026, 12, 7),
+        )
 
 if __name__ == "__main__":
     unittest.main()

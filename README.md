@@ -150,7 +150,7 @@ start salidas\tablero.html
 
 ## 8. Ejecución de pruebas automatizadas
 
-El proyecto cuenta con 50 pruebas automatizadas para verificar los módulos y las reglas principales.
+El proyecto cuenta con 51 pruebas automatizadas para verificar los módulos y las reglas principales.
 
 Para ejecutar todas las pruebas:
 
