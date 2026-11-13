@@ -331,6 +331,32 @@ def calificar_formatos(tema):
     }
 
 
+def calificar_publicaciones_calendario(calendario):
+    """
+    Calcula una referencia histórica para cada combinación
+    de formato y tema presente en el calendario.
+    """
+
+    puntuaciones = {}
+
+    for publicacion in calendario:
+        formato = publicacion.get("formato", "")
+        tema = publicacion.get("tema", "")
+
+        if not formato or not tema:
+            continue
+
+        clave = f"{formato}|{tema}"
+
+        if clave not in puntuaciones:
+            puntuaciones[clave] = calificar_publicacion(
+                formato,
+                tema
+            )
+
+    return puntuaciones
+
+
 def generar_resumen(
     pieza,
     formatos,
@@ -410,6 +436,10 @@ def ejecutar_proceso():
 
     puntuaciones = calificar_formatos(tema)
 
+    puntuaciones_calendario = calificar_publicaciones_calendario(
+        programacion["calendario"]
+    )
+
     historial = analizar_historial()
 
     resumen = generar_resumen(
@@ -422,6 +452,7 @@ def ejecutar_proceso():
     )
 
     resumen["analisis_historico"] = historial
+    resumen["puntuaciones_calendario"] = puntuaciones_calendario
 
     ruta_resumen = Path("salidas/resumen.json")
 

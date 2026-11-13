@@ -155,17 +155,18 @@ def generar_tarjetas_puntuacion(resumen):
     return tarjetas
 
 
-
-
 def generar_vista_dos_semanas(
     calendario,
     puntuaciones=None,
-    tema_puntuacion=None
+    tema_puntuacion=None,
+    puntuaciones_calendario=None
 ):
     """Genera la vista de dos semanas con puntuaciones aplicables."""
 
     grupos = agrupar_publicaciones_por_fecha(calendario)
+
     puntuaciones = puntuaciones or {}
+    puntuaciones_calendario = puntuaciones_calendario or {}
 
     ventana = cargar_ventana()
 
@@ -224,16 +225,17 @@ def generar_vista_dos_semanas(
                 str(publicacion.get("hora", "Sin hora"))
             )
 
-            es_tema_evaluado = (
-                tema_puntuacion is not None
-                and tema == tema_puntuacion
+            clave_puntuacion = f"{formato}|{tema}"
+
+            datos_puntuacion = puntuaciones_calendario.get(
+                clave_puntuacion
             )
 
-            datos_puntuacion = (
-                puntuaciones.get(formato)
-                if es_tema_evaluado
-                else None
-            )
+            if (
+                datos_puntuacion is None
+                and tema == tema_puntuacion
+            ):
+                datos_puntuacion = puntuaciones.get(formato)
 
             if (
                 datos_puntuacion
@@ -245,7 +247,7 @@ def generar_vista_dos_semanas(
 
                 puntuacion_html = (
                     f"<p class='puntuacion-publicacion'>"
-                    f"Referencia histórica del formato: "
+                    f"Referencia histórica: "
                     f"{valor:.2f}/100"
                     f"</p>"
                 )
@@ -260,13 +262,24 @@ def generar_vista_dos_semanas(
                 )
 
             else:
+                explicacion = (
+                    datos_puntuacion.get(
+                        "explicacion",
+                        "No existen datos históricos suficientes."
+                    )
+                    if datos_puntuacion
+                    else "No existen datos históricos suficientes."
+                )
+
                 puntuacion_html = (
                     "<p class='puntuacion-publicacion'>"
-                    "Sin puntuación individual disponible"
+                    "Sin datos históricos suficientes para este formato"
                     "</p>"
                 )
 
-                fuente_html = ""
+                fuente_html = (
+                    f"<small>{escape(str(explicacion))}</small>"
+                )
 
             tarjetas += f"""
             <article class="publicacion {clase}">
@@ -464,10 +477,11 @@ def generar_tablero():
     filas = generar_filas_calendario(calendario)
 
     vista_calendario = generar_vista_dos_semanas(
-    calendario,
-    resumen.get("puntuaciones", {}),
-    resumen.get("tema_detectado")
-)
+        calendario,
+        resumen.get("puntuaciones", {}),
+        resumen.get("tema_detectado"),
+        resumen.get("puntuaciones_calendario", {})
+    )
 
     historial = resumen.get("analisis_historico", {})
 
